@@ -1,14 +1,16 @@
-// Contract ABI (simplified - add your full ABI here)
+// Contract ABI (Abhi dummy ABI hai - aapko apna contract ka ABI yahan add karna hoga)
+// Yeh ABI sirf demonstration ke liye hai
 const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"},{"internalType":"address","name":"_feeWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Blacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"locked","type":"bool"}],"name":"ContractLocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"DailyClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"paused","type":"bool"}],"name":"EmergencyPaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldWallet","type":"address"},{"indexed":false,"internalType":"address","name":"newWallet","type":"address"}],"name":"FeeWalletUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"indexed":false,"internalType":"address","name":"updatedBy","type":"address"}],"name":"FrontendDataUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":false,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint256","name":"bonus","type":"uint256"}],"name":"PlatformBonusClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralEarned","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"lockedUntil","type":"uint256"}],"name":"ReserveFunded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReserveUnlocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"maxWithdrawalPerTx","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"maxDailyWithdrawal","type":"uint256"}],"name":"SecurityParametersUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"},{"indexed":false,"internalType":"bytes32","name":"taskName","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"SocialTaskAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"}],"name":"SocialTaskCompleted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"oldSupply","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"TokenSupplyUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Unblacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"UserActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"upline","type":"address"}],"name":"UserRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"},{"indexed":false,"internalType":"bool","name":"paidWithVNT","type":"bool"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"acceptOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activationBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activationFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activeUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"addSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"}],"name":"claimPlatformBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"completeSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractLocked","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyClaim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyWithdrawalAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"pause","type":"bool"}],"name":"emergencyPause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyPauseTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"emergencyPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawBNB","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"feeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"followSubscribeReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"forceActivate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"forceCompleteTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"frontendData","outputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"},{"internalType":"uint256","name":"lastUpdated","type":"uint256"},{"internalType":"address","name":"updatedBy","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"fundReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getAvailableWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getProjectStats","outputs":[{"internalType":"uint256","name":"_totalUsers","type":"uint256"},{"internalType":"uint256","name":"_activeUsers","type":"uint256"},{"internalType":"uint256","name":"_totalVolume","type":"uint256"},{"internalType":"uint256","name":"_totalWithdrawals","type":"uint256"},{"internalType":"uint256","name":"_totalTokensDistributed","type":"uint256"},{"internalType":"uint256","name":"_totalTokensAvailable","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getReserveInfo","outputs":[{"internalType":"bool","name":"funded","type":"bool"},{"internalType":"uint256","name":"lockedUntil","type":"uint256"},{"internalType":"uint256","name":"initialAmount","type":"uint256"},{"internalType":"uint256","name":"currentAvailable","type":"uint256"},{"internalType":"uint256","name":"distributed","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"getSocialTask","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSocialTasksCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserAdvancedInfo","outputs":[{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBasicInfo","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBonuses","outputs":[{"internalType":"uint256","name":"totalPlatformBonuses","type":"uint256"},{"internalType":"uint256","name":"totalReferralEarnings","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"initialReserveAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"isTaskCompleted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastActivityTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastClaimTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastWithdrawalTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"likeShareCommentReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"maxDailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxDailyWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxWithdrawalPerTx","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"minTimeBetweenActions","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectDuration","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reserveFunded","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"reserveLockedUntil","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"socialTasks","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"toggleProjectStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalTasksCompletedGlobal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensAvailable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensDistributed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensReserved","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalVolume","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"totalWithdrawnByUser","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unlockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_activationBonus","type":"uint256"}],"name":"updateActivationBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateActivationFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_dailyReward","type":"uint256"}],"name":"updateDailyReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newFeeWallet","type":"address"}],"name":"updateFeeWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"}],"name":"updateFrontendData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_followSubscribeReward","type":"uint256"},{"internalType":"uint256","name":"_likeShareCommentReward","type":"uint256"}],"name":"updateGlobalTaskRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"duration","type":"uint256"}],"name":"updateProjectDuration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"rewards","type":"uint256[]"}],"name":"updateReferralRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_maxWithdrawalPerTx","type":"uint256"},{"internalType":"uint256","name":"_maxDailyWithdrawal","type":"uint256"}],"name":"updateSecurityParameters","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"uint256","name":"reward","type":"uint256"}],"name":"updateTaskReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"updateTaskStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"}],"name":"updateTokenAddresses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"updateTotalTokenSupply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateWithdrawalFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersMain","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersStats","outputs":[{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"lastWithdrawalTime","type":"uint256"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"},{"internalType":"uint256","name":"lastActionTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vntToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vnttToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"whitelist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bool","name":"payWithVNT","type":"bool"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUnusedReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawalFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
-// Contract address (replace with your deployed contract address)
-const CONTRACT_ADDRESS = "0x660251F2CFcE9c0f9aED1e4f7aa75EF9f0618c8c"; // Add your contract address here
+// Contract address - APNA CONTRACT ADDRESS YAHAN DALIYE
+const CONTRACT_ADDRESS = "0x660251F2CFcE9c0f9aED1e4f7aa75EF9f0618c8c"; // Yeh replace karna hoga
 
 // Global variables
 let web3;
 let contract;
-let userAccount;
+let userAccount = null;
 let userInfo = null;
+let isInitialized = false;
 
 // DOM Elements
 const connectWalletBtn = document.getElementById('connectWallet');
@@ -45,7 +47,7 @@ const toastTitle = document.getElementById('toastTitle');
 const toastMessage = document.getElementById('toastMessage');
 const toastIcon = document.getElementById('toastIcon');
 
-// Platform mapping
+// Platform configuration
 const PLATFORM_CONFIG = {
     0: {
         name: "Facebook",
@@ -92,23 +94,66 @@ const TASK_TYPE_CONFIG = {
     4: { name: "Join/Subscribe", class: "join", verb: "Join" }
 };
 
+// Mock tasks data - jab tak contract se tasks load nahi ho rahe
+const MOCK_TASKS = [
+    // Facebook Tasks (4)
+    { id: 0, platform: 0, taskType: 0, name: "Follow Facebook Page", reward: "100", isActive: true },
+    { id: 1, platform: 0, taskType: 1, name: "Like Facebook Post", reward: "50", isActive: true },
+    { id: 2, platform: 0, taskType: 2, name: "Share Facebook Post", reward: "50", isActive: true },
+    { id: 3, platform: 0, taskType: 3, name: "Comment on Facebook Post", reward: "50", isActive: true },
+    
+    // Twitter Tasks (4)
+    { id: 4, platform: 1, taskType: 0, name: "Follow Twitter Account", reward: "100", isActive: true },
+    { id: 5, platform: 1, taskType: 1, name: "Like Tweet", reward: "50", isActive: true },
+    { id: 6, platform: 1, taskType: 2, name: "Retweet", reward: "50", isActive: true },
+    { id: 7, platform: 1, taskType: 3, name: "Comment on Tweet", reward: "50", isActive: true },
+    
+    // Instagram Tasks (4)
+    { id: 8, platform: 2, taskType: 0, name: "Follow Instagram Account", reward: "100", isActive: true },
+    { id: 9, platform: 2, taskType: 1, name: "Like Instagram Post", reward: "50", isActive: true },
+    { id: 10, platform: 2, taskType: 2, name: "Share Instagram Post", reward: "50", isActive: true },
+    { id: 11, platform: 2, taskType: 3, name: "Comment on Instagram Post", reward: "50", isActive: true },
+    
+    // YouTube Tasks (4)
+    { id: 12, platform: 3, taskType: 4, name: "Subscribe YouTube Channel", reward: "100", isActive: true },
+    { id: 13, platform: 3, taskType: 1, name: "Like YouTube Video", reward: "50", isActive: true },
+    { id: 14, platform: 3, taskType: 2, name: "Share YouTube Video", reward: "50", isActive: true },
+    { id: 15, platform: 3, taskType: 3, name: "Comment on YouTube Video", reward: "50", isActive: true },
+    
+    // Telegram Tasks (4)
+    { id: 16, platform: 4, taskType: 0, name: "Join Telegram Channel", reward: "100", isActive: true },
+    { id: 17, platform: 4, taskType: 0, name: "Join Telegram Group", reward: "100", isActive: true },
+    { id: 18, platform: 4, taskType: 2, name: "Share Telegram Post", reward: "50", isActive: true },
+    { id: 19, platform: 4, taskType: 3, name: "Comment in Telegram Group", reward: "50", isActive: true }
+];
+
 let currentTaskId = null;
 
 // Initialize application
 async function initApp() {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
+        
+        // Setup event listeners first
+        setupEventListeners();
+        
+        // Try to connect if already connected before
         try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAccount = accounts[0];
-            setupEventListeners();
-            await loadContract();
-            await updateUI();
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                userAccount = accounts[0];
+                await loadContract();
+                await updateUI();
+            }
         } catch (error) {
-            console.error("User denied account access", error);
+            console.log("No previous connection found");
         }
+        
+        isInitialized = true;
     } else {
         showToast("Install MetaMask", "Please install MetaMask to use this dApp!", "error");
+        // Show mock data for demo
+        showMockData();
     }
 }
 
@@ -138,8 +183,15 @@ function setupEventListeners() {
     // Listen for account changes
     if (window.ethereum) {
         window.ethereum.on('accountsChanged', (accounts) => {
-            userAccount = accounts[0];
+            userAccount = accounts[0] || null;
             updateUI();
+        });
+        
+        // Use 'disconnect' instead of 'close' (EIP-1193 compliance)
+        window.ethereum.on('disconnect', (error) => {
+            console.log("MetaMask disconnected:", error);
+            userAccount = null;
+            resetUI();
         });
     }
 }
@@ -152,42 +204,82 @@ async function connectWallet() {
     }
     
     try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await window.ethereum.request({ 
+            method: 'eth_requestAccounts',
+            params: [] // EIP-1193 compliance
+        });
+        
         userAccount = accounts[0];
         await loadContract();
         await updateUI();
+        
         showToast("Wallet Connected", `Connected: ${userAccount.substring(0, 6)}...${userAccount.substring(38)}`, "success");
     } catch (error) {
         console.error("Error connecting wallet:", error);
-        showToast("Connection Failed", "Failed to connect wallet. Please try again.", "error");
+        if (error.code === 4001) {
+            showToast("Connection Cancelled", "User rejected the connection request.", "error");
+        } else {
+            showToast("Connection Failed", "Failed to connect wallet. Please try again.", "error");
+        }
     }
 }
 
 // Load contract
 async function loadContract() {
-    if (!web3 || !CONTRACT_ADDRESS) return;
+    if (!web3) {
+        console.error("Web3 not initialized");
+        return;
+    }
+    
+    // Check if contract address is set
+    if (!CONTRACT_ADDRESS || CONTRACT_ADDRESS === "YOUR_CONTRACT_ADDRESS_HERE") {
+        console.warn("Contract address not set. Using mock data.");
+        showToast("Info", "Contract address not configured. Using demo mode.", "info");
+        return;
+    }
     
     try {
+        // Validate contract address
+        if (!web3.utils.isAddress(CONTRACT_ADDRESS)) {
+            throw new Error("Invalid contract address");
+        }
+        
         contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
         console.log("Contract loaded successfully");
     } catch (error) {
         console.error("Error loading contract:", error);
-        showToast("Contract Error", "Failed to load contract. Check contract address.", "error");
+        showToast("Contract Error", "Failed to load contract. Check contract address and ABI.", "error");
     }
 }
 
 // Update UI with user data
 async function updateUI() {
-    if (!contract || !userAccount) {
-        // Reset UI if no user connected
+    if (!userAccount) {
         resetUI();
         return;
     }
     
+    // Update wallet address display
+    document.getElementById('walletAddress').textContent = `${userAccount.substring(0, 10)}...${userAccount.substring(38)}`;
+    
+    // If contract is loaded, try to get real data
+    if (contract) {
+        try {
+            await updateRealData();
+        } catch (error) {
+            console.error("Error updating real data:", error);
+            showToast("Network Error", "Failed to fetch data from contract. Using demo mode.", "warning");
+            showMockData();
+        }
+    } else {
+        // Use mock data if contract not loaded
+        showMockData();
+    }
+}
+
+// Update real data from contract
+async function updateRealData() {
     try {
-        // Update wallet address display
-        document.getElementById('walletAddress').textContent = `${userAccount.substring(0, 10)}...${userAccount.substring(38)}`;
-        
         // Get user basic info
         userInfo = await contract.methods.getUserBasicInfo(userAccount).call();
         
@@ -213,13 +305,49 @@ async function updateUI() {
         // Update available balance for withdrawal
         document.getElementById('availableBalance').textContent = formatTokenAmount(userAdvanced.lockedTokens);
         
-        // Load tasks
-        await loadAllTasks();
+        // Load tasks from contract
+        await loadTasksFromContract();
         
     } catch (error) {
-        console.error("Error updating UI:", error);
-        showToast("Update Error", "Failed to update user information.", "error");
+        console.error("Error in updateRealData:", error);
+        throw error;
     }
+}
+
+// Show mock data for demo
+function showMockData() {
+    // Set mock user stats
+    document.getElementById('totalEarned').textContent = "1,250";
+    document.getElementById('lockedTokens').textContent = "2,500";
+    document.getElementById('tasksCompleted').textContent = "8";
+    document.getElementById('directReferrals').textContent = "3";
+    
+    // Set mock project stats
+    document.getElementById('totalUsers').textContent = "1,245";
+    document.getElementById('activeUsers').textContent = "892";
+    document.getElementById('totalVolume').textContent = "45,230";
+    document.getElementById('totalWithdrawals').textContent = "12,450";
+    
+    // Update available balance
+    document.getElementById('availableBalance').textContent = "2,500";
+    
+    // Update button states for demo
+    if (userAccount) {
+        // Demo mode - assume user is registered but not activated
+        registerBtn.disabled = true;
+        activateBtn.disabled = false;
+        dailyClaimBtn.disabled = true;
+        withdrawBtn.disabled = true;
+    } else {
+        // No wallet connected
+        registerBtn.disabled = true;
+        activateBtn.disabled = true;
+        dailyClaimBtn.disabled = true;
+        withdrawBtn.disabled = true;
+    }
+    
+    // Load mock tasks
+    loadMockTasks();
 }
 
 // Reset UI when no wallet is connected
@@ -246,6 +374,11 @@ function resetUI() {
     activateBtn.disabled = true;
     dailyClaimBtn.disabled = true;
     withdrawBtn.disabled = true;
+    
+    // Show demo tasks if no wallet connected
+    if (!userAccount) {
+        loadMockTasks();
+    }
 }
 
 // Update button states based on user status
@@ -254,10 +387,10 @@ function updateButtonStates(isActive, hasPaidActivation) {
     connectWalletBtn.disabled = false;
     
     // Register button - only if user not registered
-    registerBtn.disabled = userInfo.joinTime > 0;
+    registerBtn.disabled = userInfo && userInfo.joinTime > 0;
     
     // Activate button - only if registered but not activated
-    activateBtn.disabled = !(userInfo.joinTime > 0 && !isActive && hasPaidActivation === false);
+    activateBtn.disabled = !(userInfo && userInfo.joinTime > 0 && !isActive && hasPaidActivation === false);
     
     // Daily claim button - only if activated
     dailyClaimBtn.disabled = !isActive;
@@ -266,58 +399,138 @@ function updateButtonStates(isActive, hasPaidActivation) {
     withdrawBtn.disabled = !isActive;
 }
 
-// Load all tasks from contract
-async function loadAllTasks() {
-    if (!contract) return;
+// Load tasks from contract
+async function loadTasksFromContract() {
+    if (!contract) {
+        loadMockTasks();
+        return;
+    }
     
     try {
-        const taskCount = await contract.methods.getSocialTasksCount().call();
-        
         // Clear all task containers
         Object.values(PLATFORM_CONFIG).forEach(platform => {
             document.getElementById(platform.container).innerHTML = "";
             platform.tasks = [];
         });
         
-        // Load all tasks
+        // Try to get tasks count - if function exists
+        let taskCount = 0;
+        try {
+            taskCount = await contract.methods.getSocialTasksCount().call();
+        } catch (e) {
+            console.log("getSocialTasksCount not available, using mock tasks");
+            loadMockTasks();
+            return;
+        }
+        
+        // Load tasks
         for (let i = 0; i < Math.min(taskCount, 20); i++) {
-            const task = await contract.methods.getSocialTask(i).call();
-            const isCompleted = await contract.methods.isTaskCompleted(userAccount, i).call();
-            
-            // Store task data
-            const platform = PLATFORM_CONFIG[task.platform];
-            if (platform) {
-                platform.tasks.push({ id: i, task: task, completed: isCompleted });
-                createTaskCard(i, task, isCompleted);
+            try {
+                const task = await contract.methods.getSocialTask(i).call();
+                
+                // Safe hex to string conversion
+                let taskName = "Social Task";
+                try {
+                    if (task.taskName && task.taskName !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                        taskName = web3.utils.hexToUtf8(task.taskName);
+                    }
+                } catch (e) {
+                    console.warn("Could not convert task name hex to string:", e);
+                }
+                
+                // Check if task is completed
+                let isCompleted = false;
+                try {
+                    isCompleted = await contract.methods.isTaskCompleted(userAccount, i).call();
+                } catch (e) {
+                    console.log("isTaskCompleted not available");
+                }
+                
+                // Store task data
+                const platform = PLATFORM_CONFIG[task.platform];
+                if (platform) {
+                    platform.tasks.push({ 
+                        id: i, 
+                        task: task, 
+                        completed: isCompleted,
+                        name: taskName
+                    });
+                    createTaskCard(i, task, taskName, isCompleted);
+                }
+            } catch (error) {
+                console.error(`Error loading task ${i}:`, error);
             }
         }
         
     } catch (error) {
-        console.error("Error loading tasks:", error);
-        showToast("Tasks Error", "Failed to load tasks. Please try again.", "error");
+        console.error("Error loading tasks from contract:", error);
+        showToast("Tasks Error", "Failed to load tasks from contract. Using demo tasks.", "warning");
+        loadMockTasks();
     }
 }
 
+// Load mock tasks
+function loadMockTasks() {
+    // Clear all task containers
+    Object.values(PLATFORM_CONFIG).forEach(platform => {
+        document.getElementById(platform.container).innerHTML = "";
+        platform.tasks = [];
+    });
+    
+    // Create mock tasks
+    MOCK_TASKS.forEach(taskData => {
+        const platform = PLATFORM_CONFIG[taskData.platform];
+        if (platform) {
+            const mockTask = {
+                platform: taskData.platform,
+                taskType: taskData.taskType,
+                taskName: web3 ? web3.utils.asciiToHex(taskData.name) : "0x0",
+                reward: web3 ? web3.utils.toWei(taskData.reward, 'ether') : (taskData.reward * 10**18).toString(),
+                isActive: taskData.isActive
+            };
+            
+            // Mock completion status (random for demo)
+            const isCompleted = Math.random() > 0.7;
+            
+            platform.tasks.push({ 
+                id: taskData.id, 
+                task: mockTask, 
+                completed: isCompleted,
+                name: taskData.name
+            });
+            
+            createTaskCard(taskData.id, mockTask, taskData.name, isCompleted);
+        }
+    });
+}
+
 // Create individual task card
-function createTaskCard(taskId, taskData, isCompleted) {
+function createTaskCard(taskId, taskData, taskName, isCompleted) {
     const platform = PLATFORM_CONFIG[taskData.platform];
     if (!platform) return;
     
     const taskType = TASK_TYPE_CONFIG[taskData.taskType] || { name: "Task", class: "follow", verb: "Complete" };
     
-    // Convert bytes32 task name to string
-    let taskName = "Social Task";
-    if (taskData.taskName !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
-        taskName = web3.utils.hexToUtf8(taskData.taskName);
-    }
-    
-    const taskCard = document.createElement('div');
-    taskCard.className = `task-card ${platform.name.toLowerCase()}-card ${isCompleted ? 'completed' : ''}`;
-    
     // Button text based on completion status
     let buttonText = isCompleted ? 'Completed' : 'Start Task';
     let buttonIcon = isCompleted ? 'fa-check' : 'fa-play';
     let buttonClass = isCompleted ? 'completed-btn' : 'complete-btn';
+    
+    const taskCard = document.createElement('div');
+    taskCard.className = `task-card ${platform.name.toLowerCase()}-card ${isCompleted ? 'completed' : ''}`;
+    
+    // Format reward amount
+    let rewardAmount = "0";
+    try {
+        if (web3 && taskData.reward) {
+            rewardAmount = formatTokenAmount(taskData.reward);
+        } else if (taskData.reward) {
+            // Fallback for mock data
+            rewardAmount = taskData.reward.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    } catch (e) {
+        rewardAmount = "100";
+    }
     
     taskCard.innerHTML = `
         <div class="task-type ${taskType.class}">${taskType.name}</div>
@@ -339,7 +552,7 @@ function createTaskCard(taskId, taskData, isCompleted) {
         <div class="task-actions">
             <div class="reward-amount">
                 <i class="fas fa-gem"></i>
-                <span>${formatTokenAmount(taskData.reward)} VNTT</span>
+                <span>${rewardAmount} VNTT</span>
             </div>
             <button class="task-btn ${buttonClass}" 
                     data-task-id="${taskId}"
@@ -354,22 +567,32 @@ function createTaskCard(taskId, taskData, isCompleted) {
     // Add event listener to complete button
     if (!isCompleted) {
         const completeBtn = taskCard.querySelector('.task-btn');
-        completeBtn.addEventListener('click', () => showTaskInstructions(taskId, taskData, taskName, taskType));
+        completeBtn.addEventListener('click', () => showTaskInstructions(taskId, taskData, taskName, taskType, platform));
     }
 }
 
 // Show task instructions modal
-function showTaskInstructions(taskId, taskData, taskName, taskType) {
-    const platform = PLATFORM_CONFIG[taskData.platform];
-    if (!platform) return;
-    
+function showTaskInstructions(taskId, taskData, taskName, taskType, platform) {
     currentTaskId = taskId;
     
     // Update modal content
     document.getElementById('taskModalTitle').textContent = taskName;
     document.getElementById('taskModalName').textContent = taskName;
     document.getElementById('taskModalType').textContent = `${platform.name} - ${taskType.name}`;
-    document.getElementById('taskModalReward').textContent = formatTokenAmount(taskData.reward);
+    
+    // Format reward amount
+    let rewardAmount = "0";
+    try {
+        if (web3 && taskData.reward) {
+            rewardAmount = formatTokenAmount(taskData.reward);
+        } else {
+            rewardAmount = "100";
+        }
+    } catch (e) {
+        rewardAmount = "100";
+    }
+    
+    document.getElementById('taskModalReward').textContent = rewardAmount;
     
     // Update platform icon
     const platformIcon = document.getElementById('taskModalPlatform');
@@ -404,7 +627,7 @@ function generateTaskInstructions(platform, verb, taskName) {
             if (verb === "Follow") {
                 instructions.push("Go to our official Facebook page");
                 instructions.push("Click the 'Follow' button on the page");
-                instructions.push("Make sure you're following the page (not just liking it)");
+                instructions.push("Make sure you're following the page");
             } else if (verb === "Like") {
                 instructions.push("Go to our latest Facebook post");
                 instructions.push("Click the 'Like' button (thumbs up)");
@@ -508,7 +731,7 @@ function generateTaskInstructions(platform, verb, taskName) {
 async function handleRegister(e) {
     e.preventDefault();
     
-    if (!contract || !userAccount) {
+    if (!userAccount) {
         showToast("Wallet Required", "Please connect your wallet first!", "error");
         return;
     }
@@ -520,8 +743,24 @@ async function handleRegister(e) {
         return;
     }
     
+    if (!contract) {
+        showToast("Demo Mode", "Contract not connected. This is a demo.", "info");
+        registerModal.classList.remove('active');
+        registerForm.reset();
+        
+        // In demo mode, simulate registration
+        userInfo = {
+            joinTime: Math.floor(Date.now() / 1000),
+            isActive: false,
+            hasPaidActivation: false
+        };
+        
+        updateButtonStates(false, false);
+        showToast("Demo Registration", "Account registered (demo mode)", "success");
+        return;
+    }
+    
     try {
-        // Disable button and show loading
         submitRegisterBtn.innerHTML = '<span class="spinner"></span> Processing...';
         submitRegisterBtn.disabled = true;
         
@@ -531,7 +770,6 @@ async function handleRegister(e) {
         registerModal.classList.remove('active');
         registerForm.reset();
         
-        // Update UI
         await updateUI();
         
     } catch (error) {
@@ -545,18 +783,27 @@ async function handleRegister(e) {
 
 // Handle account activation
 async function handleActivate() {
-    if (!contract || !userAccount) {
+    if (!userAccount) {
         showToast("Wallet Required", "Please connect your wallet first!", "error");
         return;
     }
     
-    if (!userInfo || userInfo.joinTime === 0) {
-        showToast("Register First", "Please register your account first!", "error");
+    if (!contract) {
+        showToast("Demo Mode", "Contract not connected. This is a demo.", "info");
+        activateModal.classList.remove('active');
+        
+        // In demo mode, simulate activation
+        if (userInfo) {
+            userInfo.isActive = true;
+            userInfo.hasPaidActivation = true;
+        }
+        
+        updateButtonStates(true, true);
+        showToast("Demo Activation", "Account activated (demo mode)", "success");
         return;
     }
     
     try {
-        // Disable button and show loading
         submitActivateBtn.innerHTML = '<span class="spinner"></span> Processing...';
         submitActivateBtn.disabled = true;
         
@@ -565,7 +812,6 @@ async function handleActivate() {
         showToast("Activation Successful", "Your account has been activated! You can now start earning.", "success");
         activateModal.classList.remove('active');
         
-        // Update UI
         await updateUI();
         
     } catch (error) {
@@ -579,18 +825,26 @@ async function handleActivate() {
 
 // Claim daily reward
 async function claimDailyReward() {
-    if (!contract || !userAccount) {
+    if (!userAccount) {
         showToast("Wallet Required", "Please connect your wallet first!", "error");
         return;
     }
     
-    if (!userInfo || !userInfo.isActive) {
-        showToast("Activate Account", "Please activate your account first!", "error");
+    if (!contract) {
+        showToast("Demo Mode", "Daily reward claimed (demo mode)", "success");
+        
+        // Update demo stats
+        const currentEarned = parseInt(document.getElementById('totalEarned').textContent.replace(/,/g, ''));
+        document.getElementById('totalEarned').textContent = formatNumber(currentEarned + 100);
+        
+        const currentLocked = parseInt(document.getElementById('lockedTokens').textContent.replace(/,/g, ''));
+        document.getElementById('lockedTokens').textContent = formatNumber(currentLocked + 100);
+        
+        showToast("Demo Reward", "100 VNTT claimed (demo mode)", "success");
         return;
     }
     
     try {
-        // Disable button and show loading
         const originalText = dailyClaimBtn.innerHTML;
         dailyClaimBtn.innerHTML = '<span class="spinner"></span> Claiming...';
         dailyClaimBtn.disabled = true;
@@ -598,8 +852,6 @@ async function claimDailyReward() {
         await contract.methods.dailyClaim().send({ from: userAccount });
         
         showToast("Daily Reward Claimed", "100 VNTT has been added to your account!", "success");
-        
-        // Update UI
         await updateUI();
         
     } catch (error) {
@@ -613,18 +865,40 @@ async function claimDailyReward() {
 
 // Complete current task
 async function completeCurrentTask() {
-    if (currentTaskId === null || !contract || !userAccount) {
+    if (currentTaskId === null || !userAccount) {
         showToast("Error", "No task selected or wallet not connected!", "error");
         return;
     }
     
-    if (!userInfo || !userInfo.isActive) {
-        showToast("Activate Account", "Please activate your account first!", "error");
+    if (!contract) {
+        showToast("Demo Mode", "Task completed (demo mode)", "success");
+        taskModal.classList.remove('active');
+        
+        // Update demo stats
+        const currentEarned = parseInt(document.getElementById('totalEarned').textContent.replace(/,/g, ''));
+        const currentTasks = parseInt(document.getElementById('tasksCompleted').textContent);
+        
+        document.getElementById('totalEarned').textContent = formatNumber(currentEarned + 100);
+        document.getElementById('tasksCompleted').textContent = currentTasks + 1;
+        
+        // Mark task as completed in UI
+        const taskCards = document.querySelectorAll('.task-card');
+        taskCards.forEach(card => {
+            const btn = card.querySelector('.task-btn');
+            if (btn && btn.dataset.taskId == currentTaskId) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Completed';
+                btn.className = 'task-btn completed-btn';
+                btn.disabled = true;
+                card.classList.add('completed');
+            }
+        });
+        
+        showToast("Demo Task", "Task completed successfully (demo mode)!", "success");
+        currentTaskId = null;
         return;
     }
     
     try {
-        // Disable button and show loading
         completeTaskBtn.innerHTML = '<span class="spinner"></span> Processing...';
         completeTaskBtn.disabled = true;
         
@@ -633,7 +907,6 @@ async function completeCurrentTask() {
         showToast("Task Completed", "Task completed successfully! Reward has been added to your account.", "success");
         taskModal.classList.remove('active');
         
-        // Update UI
         await updateUI();
         
     } catch (error) {
@@ -650,13 +923,8 @@ async function completeCurrentTask() {
 async function handleWithdraw(e) {
     e.preventDefault();
     
-    if (!contract || !userAccount) {
+    if (!userAccount) {
         showToast("Wallet Required", "Please connect your wallet first!", "error");
-        return;
-    }
-    
-    if (!userInfo || !userInfo.isActive) {
-        showToast("Activate Account", "Please activate your account first!", "error");
         return;
     }
     
@@ -668,18 +936,29 @@ async function handleWithdraw(e) {
         return;
     }
     
-    // Check if amount is greater than fee
     if (amount <= 10) {
         showToast("Amount Too Small", "Withdrawal amount must be greater than 10 VNTT (fee)", "error");
         return;
     }
     
+    if (!contract) {
+        showToast("Demo Mode", "Withdrawal processed (demo mode)", "success");
+        withdrawModal.classList.remove('active');
+        withdrawForm.reset();
+        
+        // Update demo stats
+        const currentLocked = parseInt(document.getElementById('lockedTokens').textContent.replace(/,/g, ''));
+        const newLocked = Math.max(0, currentLocked - amount);
+        document.getElementById('lockedTokens').textContent = formatNumber(newLocked);
+        
+        showToast("Demo Withdrawal", `${amount} VNTT withdrawn (demo mode)`, "success");
+        return;
+    }
+    
     try {
-        // Disable button and show loading
         submitWithdrawBtn.innerHTML = '<span class="spinner"></span> Processing...';
         submitWithdrawBtn.disabled = true;
         
-        // Convert amount to wei (assuming 18 decimals)
         const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
         const payWithVNT = feeMethod === 'vnt';
         
@@ -689,7 +968,6 @@ async function handleWithdraw(e) {
         withdrawModal.classList.remove('active');
         withdrawForm.reset();
         
-        // Update UI
         await updateUI();
         
     } catch (error) {
@@ -706,20 +984,31 @@ function formatTokenAmount(amount) {
     if (!amount) return "0";
     
     try {
-        // Convert from wei (18 decimals)
-        const etherAmount = web3 ? web3.utils.fromWei(amount, 'ether') : (amount / 10**18).toString();
-        
-        // Format with commas
-        const num = parseFloat(etherAmount);
-        if (num >= 1000) {
-            return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
-        } else if (num >= 1) {
-            return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+        if (web3) {
+            const etherAmount = web3.utils.fromWei(amount.toString(), 'ether');
+            return formatNumber(parseFloat(etherAmount));
         } else {
-            return num.toLocaleString('en-US', { maximumFractionDigits: 4 });
+            // For mock data
+            const num = typeof amount === 'string' ? parseFloat(amount) / 10**18 : amount / 10**18;
+            return formatNumber(num);
         }
     } catch (error) {
         return "0";
+    }
+}
+
+// Format number with commas
+function formatNumber(num) {
+    if (!num && num !== 0) return "0";
+    
+    const n = typeof num === 'string' ? parseFloat(num) : num;
+    
+    if (n >= 1000) {
+        return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    } else if (n >= 1) {
+        return n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    } else {
+        return n.toLocaleString('en-US', { maximumFractionDigits: 4 });
     }
 }
 
@@ -753,4 +1042,13 @@ function showToast(title, message, type = "info") {
 }
 
 // Initialize the app when page loads
-window.addEventListener('DOMContentLoaded', initApp);
+window.addEventListener('DOMContentLoaded', () => {
+    // Check if MetaMask is installed
+    if (typeof window.ethereum !== 'undefined') {
+        initApp();
+    } else {
+        // MetaMask not installed, show demo mode
+        showToast("MetaMask Required", "Please install MetaMask to connect to the blockchain.", "error");
+        showMockData();
+    }
+});
