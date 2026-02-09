@@ -22,7 +22,6 @@
             --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             --transition: all 0.3s ease;
             
-            /* Platform Colors */
             --facebook-color: #3b5998;
             --twitter-color: #1da1f2;
             --instagram-color: #e1306c;
@@ -53,7 +52,6 @@
             padding: 20px;
         }
         
-        /* Header Styles */
         .header {
             display: flex;
             justify-content: space-between;
@@ -104,7 +102,6 @@
             font-size: 14px;
         }
         
-        /* User Actions Section */
         .user-actions {
             display: flex;
             gap: 15px;
@@ -164,7 +161,6 @@
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
         }
         
-        /* User Info Card */
         .user-info-card {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -204,7 +200,6 @@
             font-size: 14px;
         }
         
-        /* Platform Sections */
         .platform-section {
             margin-bottom: 50px;
             position: relative;
@@ -252,7 +247,6 @@
             gap: 25px;
         }
         
-        /* Individual Task Cards */
         .task-card {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -401,17 +395,33 @@
             cursor: default;
         }
         
-        .verify-btn {
-            background: linear-gradient(90deg, var(--warning-color), #f59e0b);
-            color: white;
+        .stats-banner {
+            background: linear-gradient(90deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
         
-        .verify-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        .stat-item {
+            text-align: center;
         }
         
-        /* Modal Styles */
+        .stat-item .value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        .stat-item .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -547,12 +557,6 @@
             color: white;
         }
         
-        .warning-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        }
-        
-        /* Instruction Modal */
         .instructions-list {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
@@ -594,39 +598,53 @@
             color: var(--text-secondary);
         }
         
-        /* Stats Banner */
-        .stats-banner {
-            background: linear-gradient(90deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
         }
         
-        .stat-item {
-            text-align: center;
+        .toast.show {
+            transform: translateX(0);
         }
         
-        .stat-item .value {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 5px;
-            color: var(--text-primary);
+        .toast.success {
+            border-left: 4px solid var(--accent-color);
         }
         
-        .stat-item .label {
-            font-size: 13px;
-            color: var(--text-secondary);
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
         }
         
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .tasks-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            }
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
@@ -673,62 +691,10 @@
                 width: 100%;
             }
         }
-        
-        /* Loading Spinner */
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1001;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            max-width: 350px;
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-        
-        .toast.success {
-            border-left: 4px solid var(--accent-color);
-        }
-        
-        .toast.error {
-            border-left: 4px solid var(--danger-color);
-        }
-        
-        .toast.info {
-            border-left: 4px solid var(--primary-color);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header class="header">
             <div class="logo">
                 <div class="logo-icon">
@@ -739,13 +705,9 @@
                     <p>Complete Social Tasks & Earn VNTT Tokens</p>
                 </div>
             </div>
-            
-            <div class="user-address" id="walletAddress">
-                Not Connected
-            </div>
+            <div class="user-address" id="walletAddress">Not Connected</div>
         </header>
         
-        <!-- User Actions -->
         <div class="user-actions">
             <button class="action-btn connect-btn" id="connectWallet">
                 <i class="fas fa-wallet"></i> Connect Wallet
@@ -764,7 +726,6 @@
             </button>
         </div>
         
-        <!-- User Info -->
         <div class="user-info-card">
             <div class="user-stat">
                 <div class="stat-value" id="totalEarned">0</div>
@@ -784,7 +745,6 @@
             </div>
         </div>
         
-        <!-- Project Stats Banner -->
         <div class="stats-banner">
             <div class="stat-item">
                 <div class="value" id="totalUsers">0</div>
@@ -804,7 +764,6 @@
             </div>
         </div>
         
-        <!-- Facebook Tasks -->
         <section class="platform-section">
             <div class="platform-header">
                 <div class="platform-icon facebook-bg">
@@ -815,13 +774,9 @@
                     <p class="platform-subtitle">Complete Facebook tasks and earn rewards</p>
                 </div>
             </div>
-            
-            <div class="tasks-grid" id="facebookTasks">
-                <!-- Facebook tasks will be loaded here -->
-            </div>
+            <div class="tasks-grid" id="facebookTasks"></div>
         </section>
         
-        <!-- Twitter Tasks -->
         <section class="platform-section">
             <div class="platform-header">
                 <div class="platform-icon twitter-bg">
@@ -832,13 +787,9 @@
                     <p class="platform-subtitle">Complete Twitter tasks and earn rewards</p>
                 </div>
             </div>
-            
-            <div class="tasks-grid" id="twitterTasks">
-                <!-- Twitter tasks will be loaded here -->
-            </div>
+            <div class="tasks-grid" id="twitterTasks"></div>
         </section>
         
-        <!-- Instagram Tasks -->
         <section class="platform-section">
             <div class="platform-header">
                 <div class="platform-icon instagram-bg">
@@ -849,13 +800,9 @@
                     <p class="platform-subtitle">Complete Instagram tasks and earn rewards</p>
                 </div>
             </div>
-            
-            <div class="tasks-grid" id="instagramTasks">
-                <!-- Instagram tasks will be loaded here -->
-            </div>
+            <div class="tasks-grid" id="instagramTasks"></div>
         </section>
         
-        <!-- YouTube Tasks -->
         <section class="platform-section">
             <div class="platform-header">
                 <div class="platform-icon youtube-bg">
@@ -866,13 +813,9 @@
                     <p class="platform-subtitle">Complete YouTube tasks and earn rewards</p>
                 </div>
             </div>
-            
-            <div class="tasks-grid" id="youtubeTasks">
-                <!-- YouTube tasks will be loaded here -->
-            </div>
+            <div class="tasks-grid" id="youtubeTasks"></div>
         </section>
         
-        <!-- Telegram Tasks -->
         <section class="platform-section">
             <div class="platform-header">
                 <div class="platform-icon telegram-bg">
@@ -883,14 +826,10 @@
                     <p class="platform-subtitle">Complete Telegram tasks and earn rewards</p>
                 </div>
             </div>
-            
-            <div class="tasks-grid" id="telegramTasks">
-                <!-- Telegram tasks will be loaded here -->
-            </div>
+            <div class="tasks-grid" id="telegramTasks"></div>
         </section>
     </div>
     
-    <!-- Registration Modal -->
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -921,7 +860,6 @@
         </div>
     </div>
     
-    <!-- Activation Modal -->
     <div class="modal" id="activateModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -954,14 +892,12 @@
         </div>
     </div>
     
-    <!-- Task Instructions Modal -->
     <div class="modal" id="taskModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="taskModalTitle">Task Instructions</h2>
                 <button class="close-modal" id="closeTaskModal">&times;</button>
             </div>
-            
             <div style="margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                     <div id="taskModalPlatform" class="platform-icon" style="width: 40px; height: 40px; font-size: 18px;"></div>
@@ -970,7 +906,6 @@
                         <div style="color: var(--text-secondary); font-size: 14px;" id="taskModalType"></div>
                     </div>
                 </div>
-                
                 <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-gem" style="color: var(--warning-color); font-size: 20px;"></i>
@@ -981,19 +916,16 @@
                     </div>
                 </div>
             </div>
-            
             <div class="instructions-list">
                 <h3 style="margin-bottom: 15px; font-size: 16px;">Follow these steps:</h3>
                 <div id="taskInstructions"></div>
             </div>
-            
             <button class="modal-btn primary-btn" id="completeTaskBtn">
                 <i class="fas fa-check-circle"></i> Mark as Completed
             </button>
         </div>
     </div>
     
-    <!-- Withdrawal Modal -->
     <div class="modal" id="withdrawModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1033,7 +965,6 @@
         </div>
     </div>
     
-    <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle" id="toastIcon"></i>
         <div>
