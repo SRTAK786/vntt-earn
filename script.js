@@ -11,52 +11,81 @@ let userAccount;
 
 // DOM Elements
 const connectWalletBtn = document.getElementById('connectWallet');
-const dailyClaimBtn = document.getElementById('dailyClaimBtn');
-const activateBtn = document.getElementById('activateBtn');
-const withdrawBtn = document.getElementById('withdrawBtn');
-const registerBtn = document.getElementById('registerBtn');
-const tasksContainer = document.getElementById('tasksContainer');
-const taskFilterBtns = document.querySelectorAll('.filter-btn');
-
-// Modal elements
-const registerModal = document.getElementById('registerModal');
-const withdrawModal = document.getElementById('withdrawModal');
-const closeRegisterModal = document.getElementById('closeRegisterModal');
-const closeWithdrawModal = document.getElementById('closeWithdrawModal');
-const registerForm = document.getElementById('registerForm');
-const withdrawForm = document.getElementById('withdrawForm');
+const navTabs = document.querySelectorAll('.nav-tab');
+const tasksContainer = document.getElementById('all-tasks');
+const instructionsModal = document.getElementById('instructionsModal');
+const closeInstructionsModal = document.getElementById('closeInstructionsModal');
+const confirmCompleteBtn = document.getElementById('confirmCompleteBtn');
 
 // Platform mapping
-const PLATFORM_NAMES = {
-    0: "Facebook",
-    1: "Twitter", 
-    2: "Instagram",
-    3: "YouTube",
-    4: "Telegram"
+const PLATFORM_CONFIG = {
+    0: {
+        name: "Facebook",
+        color: "#3b5998",
+        icon: "fab fa-facebook-f",
+        container: "facebook-tasks-container",
+        statsAvailable: "facebook-available",
+        statsRewards: "facebook-rewards",
+        progressBar: "facebook-progress",
+        completedCount: "facebook-completed"
+    },
+    1: {
+        name: "Twitter",
+        color: "#1da1f2",
+        icon: "fab fa-twitter",
+        container: "twitter-tasks-container",
+        statsAvailable: "twitter-available",
+        statsRewards: "twitter-rewards",
+        progressBar: "twitter-progress",
+        completedCount: "twitter-completed"
+    },
+    2: {
+        name: "Instagram",
+        color: "#e1306c",
+        icon: "fab fa-instagram",
+        container: "instagram-tasks-container",
+        statsAvailable: "instagram-available",
+        statsRewards: "instagram-rewards",
+        progressBar: "instagram-progress",
+        completedCount: "instagram-completed"
+    },
+    3: {
+        name: "YouTube",
+        color: "#ff0000",
+        icon: "fab fa-youtube",
+        container: "youtube-tasks-container",
+        statsAvailable: "youtube-available",
+        statsRewards: "youtube-rewards",
+        progressBar: "youtube-progress",
+        completedCount: "youtube-completed"
+    },
+    4: {
+        name: "Telegram",
+        color: "#0088cc",
+        icon: "fab fa-telegram",
+        container: "telegram-tasks-container",
+        statsAvailable: "telegram-available",
+        statsRewards: "telegram-rewards",
+        progressBar: "telegram-progress",
+        completedCount: "telegram-completed"
+    }
 };
 
-const PLATFORM_CLASSES = {
-    0: "platform-facebook",
-    1: "platform-twitter",
-    2: "platform-instagram",
-    3: "platform-youtube",
-    4: "platform-telegram"
+const TASK_TYPE_CONFIG = {
+    0: { name: "Follow/Subscribe", class: "follow" },
+    1: { name: "Like", class: "like" },
+    2: { name: "Share", class: "share" },
+    3: { name: "Comment", class: "comment" },
+    4: { name: "Join/Subscribe", class: "join" }
 };
 
-const TASK_TYPE_NAMES = {
-    0: "Follow/Subscribe",
-    1: "Like",
-    2: "Share/Retweet",
-    3: "Comment",
-    4: "Join/Subscribe"
-};
+let currentTaskId = null;
 
 // Initialize application
 async function initApp() {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         try {
-            // Request account access
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             setupEventListeners();
             await loadContract();
@@ -72,27 +101,45 @@ async function initApp() {
 // Setup event listeners
 function setupEventListeners() {
     connectWalletBtn.addEventListener('click', connectWallet);
-    dailyClaimBtn.addEventListener('click', claimDailyReward);
-    activateBtn.addEventListener('click', activateAccount);
-    withdrawBtn.addEventListener('click', () => withdrawModal.classList.add('active'));
-    registerBtn.addEventListener('click', () => registerModal.classList.add('active'));
     
-    // Close modals
-    closeRegisterModal.addEventListener('click', () => registerModal.classList.remove('active'));
-    closeWithdrawModal.addEventListener('click', () => withdrawModal.classList.remove('active'));
-    
-    // Form submissions
-    registerForm.addEventListener('submit', handleRegister);
-    withdrawForm.addEventListener('submit', handleWithdraw);
-    
-    // Task filter buttons
-    taskFilterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            taskFilterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            filterTasks(btn.dataset.filter);
+    // Navigation tabs
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            navTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Show selected tab content
+            const tabId = tab.dataset.tab;
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            if (tabId === 'all-tasks') {
+                document.getElementById('all-tasks').style.display = 'block';
+            } else if (tabId === 'my-stats') {
+                document.getElementById('my-stats').style.display = 'block';
+                updateStatsTab();
+            } else {
+                // Show platform-specific section
+                document.getElementById('all-tasks').style.display = 'block';
+                const platformSection = document.getElementById(tabId.replace('-tasks', '-section'));
+                if (platformSection) {
+                    window.scrollTo({
+                        top: platformSection.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            }
         });
     });
+    
+    // Modal close button
+    closeInstructionsModal.addEventListener('click', () => {
+        instructionsModal.classList.remove('active');
+    });
+    
+    // Confirm task completion
+    confirmCompleteBtn.addEventListener('click', completeCurrentTask);
     
     // Listen for account changes
     if (window.ethereum) {
@@ -143,224 +190,271 @@ async function updateUI() {
         
         // Update user stats
         document.getElementById('totalEarned').textContent = formatTokenAmount(userInfo.totalEarned);
-        document.getElementById('lockedTokens').textContent = formatTokenAmount(userInfo.lockedTokens);
+        document.getElementById('userAddress').textContent = userAccount.substring(0, 10) + '...';
+        document.getElementById('uplineAddress').textContent = userInfo.upline ? userInfo.upline.substring(0, 8) + '...' : 'None';
+        document.getElementById('accountStatus').textContent = userInfo.isActive ? 'Active' : 'Inactive';
+        document.getElementById('accountStatus').style.color = userInfo.isActive ? 'var(--accent-color)' : 'var(--danger-color)';
         
-        // Get advanced info (simulated for this example)
-        // In a real implementation, you'd call getUserAdvancedInfo
+        if (userInfo.joinTime > 0) {
+            const joinDate = new Date(userInfo.joinTime * 1000);
+            document.getElementById('joinDate').textContent = joinDate.toLocaleDateString();
+        }
+        
+        // Get advanced info
+        const userAdvanced = await contract.methods.getUserAdvancedInfo(userAccount).call();
+        document.getElementById('lockedTokens').textContent = formatTokenAmount(userAdvanced.lockedTokens);
+        document.getElementById('directReferrals').textContent = userAdvanced.directReferrals;
+        document.getElementById('tasksCompleted').textContent = `${userAdvanced.userTasksCompleted}/20`;
+        document.getElementById('dailyClaims').textContent = `${userAdvanced.claimedToday}/1`;
+        
+        // Update stats tab
+        document.getElementById('statsTotalEarned').textContent = formatTokenAmount(userInfo.totalEarned) + ' VNTT';
+        document.getElementById('statsLockedTokens').textContent = formatTokenAmount(userAdvanced.lockedTokens) + ' VNTT';
+        document.getElementById('statsTotalWithdrawn').textContent = formatTokenAmount(userInfo.totalWithdrawn) + ' VNTT';
+        document.getElementById('statsDirectReferrals').textContent = userAdvanced.directReferrals;
+        
+        // Calculate available to withdraw
+        const available = userAdvanced.lockedTokens;
+        document.getElementById('statsAvailableWithdraw').textContent = formatTokenAmount(available) + ' VNTT';
+        
+        // Load tasks
+        await loadAllTasks();
         
         // Update project stats
         const projectStats = await contract.methods.getProjectStats().call();
-        document.getElementById('totalUsers').textContent = projectStats._totalUsers;
-        document.getElementById('activeUsers').textContent = projectStats._activeUsers;
-        document.getElementById('totalVolume').textContent = formatTokenAmount(projectStats._totalVolume);
-        document.getElementById('totalWithdrawals').textContent = formatTokenAmount(projectStats._totalWithdrawals);
         
-        // Load tasks
-        await loadTasks();
-        
-        // Update button states based on user status
-        updateButtonStates(userInfo.isActive);
+        // Update platform progress
+        updatePlatformProgress();
         
     } catch (error) {
         console.error("Error updating UI:", error);
     }
 }
 
-// Load tasks from contract
-async function loadTasks() {
+// Load all tasks from contract
+async function loadAllTasks() {
     if (!contract) return;
     
     try {
         const taskCount = await contract.methods.getSocialTasksCount().call();
-        tasksContainer.innerHTML = '';
+        
+        // Clear all task containers
+        Object.values(PLATFORM_CONFIG).forEach(platform => {
+            document.getElementById(platform.container).innerHTML = '';
+        });
+        
+        // Platform stats
+        const platformStats = {
+            0: { count: 0, totalReward: 0, completed: 0 },
+            1: { count: 0, totalReward: 0, completed: 0 },
+            2: { count: 0, totalReward: 0, completed: 0 },
+            3: { count: 0, totalReward: 0, completed: 0 },
+            4: { count: 0, totalReward: 0, completed: 0 }
+        };
         
         for (let i = 0; i < Math.min(taskCount, 20); i++) {
             const task = await contract.methods.getSocialTask(i).call();
             const isCompleted = await contract.methods.isTaskCompleted(userAccount, i).call();
             
-            // Convert bytes32 task name to string
-            const taskNameHex = task.taskName;
-            let taskName = "Social Task";
-            if (taskNameHex !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
-                taskName = web3.utils.hexToUtf8(taskNameHex);
+            // Update platform stats
+            const platform = task.platform;
+            platformStats[platform].count++;
+            platformStats[platform].totalReward += parseInt(task.reward);
+            if (isCompleted) {
+                platformStats[platform].completed++;
             }
             
-            createTaskCard(i, task, taskName, isCompleted);
+            // Create task card
+            createTaskCard(i, task, isCompleted);
         }
+        
+        // Update platform statistics
+        Object.keys(platformStats).forEach(platformId => {
+            const stats = platformStats[platformId];
+            const platform = PLATFORM_CONFIG[platformId];
+            
+            if (platform) {
+                document.getElementById(platform.statsAvailable).textContent = stats.count;
+                document.getElementById(platform.statsRewards).textContent = formatTokenAmount(stats.totalReward) + ' VNTT';
+                document.getElementById(platform.completedCount).textContent = stats.completed;
+                
+                // Update progress bar
+                const progressBar = document.getElementById(platform.progressBar);
+                if (progressBar) {
+                    const percentage = stats.count > 0 ? (stats.completed / stats.count) * 100 : 0;
+                    progressBar.style.width = percentage + '%';
+                }
+            }
+        });
+        
     } catch (error) {
         console.error("Error loading tasks:", error);
     }
 }
 
-// Create task card
-function createTaskCard(taskId, task, taskName, isCompleted) {
-    const taskCard = document.createElement('div');
-    taskCard.className = `task-card ${isCompleted ? 'completed' : ''}`;
-    taskCard.dataset.platform = PLATFORM_NAMES[task.platform].toLowerCase();
+// Create individual task card
+function createTaskCard(taskId, task, isCompleted) {
+    const platform = PLATFORM_CONFIG[task.platform];
+    if (!platform) return;
     
-    const platformClass = PLATFORM_CLASSES[task.platform] || 'platform-facebook';
-    const platformName = PLATFORM_NAMES[task.platform] || 'Unknown';
-    const taskType = TASK_TYPE_NAMES[task.taskType] || 'Task';
+    const taskType = TASK_TYPE_CONFIG[task.taskType] || { name: "Task", class: "follow" };
+    
+    // Convert bytes32 task name to string
+    let taskName = "Social Task";
+    if (task.taskName !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
+        taskName = web3.utils.hexToUtf8(task.taskName);
+    }
+    
+    const taskCard = document.createElement('div');
+    taskCard.className = `task-card ${platform.name.toLowerCase()}-card ${isCompleted ? 'completed' : ''}`;
     
     taskCard.innerHTML = `
-        <div class="task-platform ${platformClass}">${platformName}</div>
+        <div class="task-type ${taskType.class}">${taskType.name}</div>
         <h3 class="task-name">${taskName}</h3>
-        <div class="task-reward">
-            <i class="fas fa-gem"></i>
-            <span>${formatTokenAmount(task.reward)} VNTT</span>
+        <div class="task-details">
+            <div class="task-detail-item">
+                <i class="fas fa-layer-group"></i>
+                <span>Platform: <strong>${platform.name}</strong></span>
+            </div>
+            <div class="task-detail-item">
+                <i class="fas fa-tasks"></i>
+                <span>Type: <strong>${taskType.name}</strong></span>
+            </div>
+            <div class="task-detail-item">
+                <i class="fas fa-clock"></i>
+                <span>Status: <strong style="color: ${isCompleted ? 'var(--accent-color)' : 'var(--warning-color)'}">${isCompleted ? 'Completed' : 'Available'}</strong></span>
+            </div>
         </div>
-        <div class="task-actions">
+        <div class="task-reward">
+            <div class="reward-amount">
+                <i class="fas fa-gem"></i>
+                <span>${formatTokenAmount(task.reward)} VNTT</span>
+            </div>
             <button class="complete-btn ${isCompleted ? 'completed' : ''}" 
                     data-task-id="${taskId}"
                     ${isCompleted ? 'disabled' : ''}>
-                ${isCompleted ? '<i class="fas fa-check"></i> Completed' : '<i class="fas fa-play"></i> Complete Task'}
+                ${isCompleted ? '<i class="fas fa-check"></i> Completed' : '<i class="fas fa-play"></i> Start Task'}
             </button>
-            <div class="task-status ${isCompleted ? 'completed' : ''}">
-                ${isCompleted ? 'Completed' : 'Available'}
-            </div>
         </div>
     `;
     
-    tasksContainer.appendChild(taskCard);
+    document.getElementById(platform.container).appendChild(taskCard);
     
     // Add event listener to complete button
     if (!isCompleted) {
         const completeBtn = taskCard.querySelector('.complete-btn');
-        completeBtn.addEventListener('click', () => completeTask(taskId));
+        completeBtn.addEventListener('click', () => showTaskInstructions(taskId, task, taskName));
     }
 }
 
-// Filter tasks by platform
-function filterTasks(filter) {
-    const taskCards = document.querySelectorAll('.task-card');
+// Show task instructions modal
+function showTaskInstructions(taskId, task, taskName) {
+    const platform = PLATFORM_CONFIG[task.platform];
+    const taskType = TASK_TYPE_CONFIG[task.taskType];
     
-    taskCards.forEach(card => {
-        if (filter === 'all' || card.dataset.platform === filter) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
+    if (!platform || !taskType) return;
+    
+    currentTaskId = taskId;
+    
+    // Update modal content
+    document.getElementById('modalTaskName').textContent = taskName;
+    document.getElementById('modalTaskReward').textContent = formatTokenAmount(task.reward);
+    
+    // Generate instructions based on platform and task type
+    const instructions = generateInstructions(platform.name, taskType.name);
+    
+    document.getElementById('step1').textContent = instructions.step1;
+    document.getElementById('step2').textContent = instructions.step2;
+    document.getElementById('step3').textContent = instructions.step3;
+    
+    // Show modal
+    instructionsModal.classList.add('active');
 }
 
-// Update button states based on user status
-function updateButtonStates(isActive) {
-    if (isActive) {
-        activateBtn.style.display = 'none';
-        dailyClaimBtn.disabled = false;
-        withdrawBtn.disabled = false;
-    } else {
-        activateBtn.style.display = 'inline-block';
-        dailyClaimBtn.disabled = true;
-        withdrawBtn.disabled = true;
+// Generate task instructions
+function generateInstructions(platform, taskType) {
+    const instructions = {
+        step1: "",
+        step2: "",
+        step3: ""
+    };
+    
+    switch(taskType) {
+        case "Follow/Subscribe":
+        case "Join/Subscribe":
+            instructions.step1 = `Visit our official ${platform} page`;
+            instructions.step2 = `Click the Follow/Subscribe button`;
+            instructions.step3 = `Wait for the transaction to be confirmed`;
+            break;
+            
+        case "Like":
+            instructions.step1 = `Go to our latest post on ${platform}`;
+            instructions.step2 = `Click the Like button`;
+            instructions.step3 = `Confirm the transaction to claim your reward`;
+            break;
+            
+        case "Share":
+            instructions.step1 = `Find our post on ${platform}`;
+            instructions.step2 = `Click the Share/Retweet button`;
+            instructions.step3 = `Share with your friends and confirm`;
+            break;
+            
+        case "Comment":
+            instructions.step1 = `Go to our ${platform} post`;
+            instructions.step2 = `Leave a meaningful comment`;
+            instructions.step3 = `Submit and confirm your participation`;
+            break;
+            
+        default:
+            instructions.step1 = "Visit the task page";
+            instructions.step2 = "Complete the required actions";
+            instructions.step3 = "Confirm completion to claim reward";
     }
+    
+    return instructions;
 }
 
-// Handle user registration
-async function handleRegister(e) {
-    e.preventDefault();
-    const uplineAddress = document.getElementById('uplineAddress').value;
-    
-    if (!contract || !userAccount) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    if (!web3.utils.isAddress(uplineAddress)) {
-        alert('Please enter a valid Ethereum address!');
-        return;
-    }
+// Complete the current task
+async function completeCurrentTask() {
+    if (currentTaskId === null || !contract || !userAccount) return;
     
     try {
-        await contract.methods.register(uplineAddress).send({ from: userAccount });
-        alert('Registration successful!');
-        registerModal.classList.remove('active');
+        instructionsModal.classList.remove('active');
+        
+        // Show loading state
+        confirmCompleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        confirmCompleteBtn.disabled = true;
+        
+        await contract.methods.completeSocialTask(currentTaskId).send({ from: userAccount });
+        
+        alert('Task completed successfully! Reward has been added to your account.');
         await updateUI();
-    } catch (error) {
-        console.error("Error registering:", error);
-        alert('Registration failed: ' + error.message);
-    }
-}
-
-// Activate account
-async function activateAccount() {
-    if (!contract || !userAccount) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    try {
-        await contract.methods.activate().send({ from: userAccount });
-        alert('Account activated successfully!');
-        await updateUI();
-    } catch (error) {
-        console.error("Error activating account:", error);
-        alert('Activation failed: ' + error.message);
-    }
-}
-
-// Claim daily reward
-async function claimDailyReward() {
-    if (!contract || !userAccount) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    try {
-        await contract.methods.dailyClaim().send({ from: userAccount });
-        alert('Daily reward claimed successfully!');
-        await updateUI();
-    } catch (error) {
-        console.error("Error claiming daily reward:", error);
-        alert('Claim failed: ' + error.message);
-    }
-}
-
-// Complete a task
-async function completeTask(taskId) {
-    if (!contract || !userAccount) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    try {
-        await contract.methods.completeSocialTask(taskId).send({ from: userAccount });
-        alert('Task completed successfully!');
-        await updateUI();
+        
     } catch (error) {
         console.error("Error completing task:", error);
         alert('Task completion failed: ' + error.message);
+    } finally {
+        confirmCompleteBtn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Completed This Task';
+        confirmCompleteBtn.disabled = false;
+        currentTaskId = null;
     }
 }
 
-// Handle withdrawal
-async function handleWithdraw(e) {
-    e.preventDefault();
-    const amount = document.getElementById('withdrawAmount').value;
-    const payWithVNT = document.getElementById('payWithVNT').checked;
-    
-    if (!contract || !userAccount) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    if (!amount || amount <= 0) {
-        alert('Please enter a valid amount!');
-        return;
-    }
-    
-    // Convert to wei (assuming 18 decimals)
-    const amountInWei = web3.utils.toWei(amount, 'ether');
+// Update platform progress
+function updatePlatformProgress() {
+    // This function would update the progress bars for each platform
+    // based on completed tasks vs total tasks
+}
+
+// Update stats tab
+async function updateStatsTab() {
+    if (!contract || !userAccount) return;
     
     try {
-        await contract.methods.withdraw(amountInWei, payWithVNT).send({ from: userAccount });
-        alert('Withdrawal successful!');
-        withdrawModal.classList.remove('active');
-        withdrawForm.reset();
-        await updateUI();
+        // Additional stats would be loaded here
+        console.log("Updating stats tab...");
     } catch (error) {
-        console.error("Error withdrawing:", error);
-        alert('Withdrawal failed: ' + error.message);
+        console.error("Error updating stats:", error);
     }
 }
 
@@ -368,17 +462,21 @@ async function handleWithdraw(e) {
 function formatTokenAmount(amount) {
     if (!amount) return "0";
     
-    // Convert from wei (18 decimals)
-    const etherAmount = web3 ? web3.utils.fromWei(amount, 'ether') : (amount / 10**18).toString();
-    
-    // Format with commas
-    const num = parseFloat(etherAmount);
-    if (num >= 1000) {
-        return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    } else if (num >= 1) {
-        return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    } else {
-        return num.toLocaleString('en-US', { maximumFractionDigits: 4 });
+    try {
+        // Convert from wei (18 decimals)
+        const etherAmount = web3 ? web3.utils.fromWei(amount, 'ether') : (amount / 10**18).toString();
+        
+        // Format with commas
+        const num = parseFloat(etherAmount);
+        if (num >= 1000) {
+            return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        } else if (num >= 1) {
+            return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+        } else {
+            return num.toLocaleString('en-US', { maximumFractionDigits: 4 });
+        }
+    } catch (error) {
+        return "0";
     }
 }
 
