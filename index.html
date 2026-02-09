@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNetworkMain - Complete Social Tasks Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --secondary-color: #8b5cf6;
+            --accent-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --dark-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --diamond-gradient: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1));
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
+            
+            /* Platform Colors */
+            --facebook-color: #3b5998;
+            --twitter-color: #1da1f2;
+            --instagram-color: #e1306c;
+            --youtube-color: #ff0000;
+            --telegram-color: #0088cc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 20%);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--diamond-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.3) 50%, transparent 52%);
+            transform: rotate(45deg);
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .logo-text p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* User Actions Section */
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .connect-btn {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .register-btn {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--secondary-color);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .activate-btn {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .daily-btn {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .withdraw-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .connect-btn:hover {
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        /* User Info Card */
+        .user-info-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .user-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .user-address {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        /* Platform Sections */
+        .platform-section {
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .platform-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .facebook-bg { background: linear-gradient(135deg, var(--facebook-color), #4267B2); }
+        .twitter-bg { background: linear-gradient(135deg, var(--twitter-color), #1C9CEA); }
+        .instagram-bg { background: linear-gradient(135deg, var(--instagram-color), #C13584); }
+        .youtube-bg { background: linear-gradient(135deg, var(--youtube-color), #FF0000); }
+        .telegram-bg { background: linear-gradient(135deg, var(--telegram-color), #2AABEE); }
+        
+        .platform-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .platform-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+        
+        /* Individual Task Cards */
+        .task-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            opacity: 0.8;
+        }
+        
+        .facebook-card::before { background: var(--facebook-color); }
+        .twitter-card::before { background: var(--twitter-color); }
+        .instagram-card::before { background: var(--instagram-color); }
+        .youtube-card::before { background: var(--youtube-color); }
+        .telegram-card::before { background: var(--telegram-color); }
+        
+        .task-card.completed {
+            border-color: var(--accent-color);
+        }
+        
+        .task-card.completed::after {
+            content: 'COMPLETED';
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 40px;
+            font-size: 11px;
+            font-weight: 700;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+        }
+        
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .task-type {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+        
+        .task-type.follow { background: rgba(16, 185, 129, 0.2); color: var(--accent-color); }
+        .task-type.like { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .task-type.share { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+        .task-type.comment { background: rgba(245, 158, 11, 0.2); color: var(--warning-color); }
+        .task-type.subscribe { background: rgba(239, 68, 68, 0.2); color: var(--danger-color); }
+        .task-type.join { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
+        
+        .task-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .task-details {
+            margin-bottom: 20px;
+        }
+        
+        .task-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .task-detail-item i {
+            width: 18px;
+            color: var(--primary-color);
+        }
+        
+        .task-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+            margin-top: auto;
+        }
+        
+        .reward-amount {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-color), #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .task-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+        
+        .complete-btn {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .completed-btn {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            cursor: default;
+        }
+        
+        .verify-btn {
+            background: linear-gradient(90deg, var(--warning-color), #f59e0b);
+            color: white;
+        }
+        
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--dark-bg);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            box-shadow: var(--card-shadow);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .success-btn {
+            background: linear-gradient(90deg, var(--accent-color), #34d399);
+            color: white;
+        }
+        
+        .success-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .warning-btn {
+            background: linear-gradient(90deg, var(--warning-color), #f59e0b);
+            color: white;
+        }
+        
+        .warning-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        /* Instruction Modal */
+        .instructions-list {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .instruction-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .instruction-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .instruction-number {
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .instruction-text {
+            flex-grow: 1;
+            color: var(--text-secondary);
+        }
+        
+        /* Stats Banner */
+        .stats-banner {
+            background: linear-gradient(90deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-item .value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        
+        .stat-item .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .tasks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .user-actions {
+                justify-content: center;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-info-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .task-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .task-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gem" style="color: #0ea5e9; font-size: 24px;"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>VNetworkMain</h1>
+                    <p>Complete Social Tasks & Earn VNTT Tokens</p>
+                </div>
+            </div>
+            
+            <div class="user-address" id="walletAddress">
+                Not Connected
+            </div>
+        </header>
+        
+        <!-- User Actions -->
+        <div class="user-actions">
+            <button class="action-btn connect-btn" id="connectWallet">
+                <i class="fas fa-wallet"></i> Connect Wallet
+            </button>
+            <button class="action-btn register-btn" id="registerBtn">
+                <i class="fas fa-user-plus"></i> Register
+            </button>
+            <button class="action-btn activate-btn" id="activateBtn">
+                <i class="fas fa-bolt"></i> Activate Account
+            </button>
+            <button class="action-btn daily-btn" id="dailyClaimBtn">
+                <i class="fas fa-calendar-day"></i> Daily Claim
+            </button>
+            <button class="action-btn withdraw-btn" id="withdrawBtn">
+                <i class="fas fa-download"></i> Withdraw
+            </button>
+        </div>
+        
+        <!-- User Info -->
+        <div class="user-info-card">
+            <div class="user-stat">
+                <div class="stat-value" id="totalEarned">0</div>
+                <div class="stat-label">Total Earned</div>
+            </div>
+            <div class="user-stat">
+                <div class="stat-value" id="lockedTokens">0</div>
+                <div class="stat-label">Locked Tokens</div>
+            </div>
+            <div class="user-stat">
+                <div class="stat-value" id="tasksCompleted">0</div>
+                <div class="stat-label">Tasks Completed</div>
+            </div>
+            <div class="user-stat">
+                <div class="stat-value" id="directReferrals">0</div>
+                <div class="stat-label">Direct Referrals</div>
+            </div>
+        </div>
+        
+        <!-- Project Stats Banner -->
+        <div class="stats-banner">
+            <div class="stat-item">
+                <div class="value" id="totalUsers">0</div>
+                <div class="label">Total Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="activeUsers">0</div>
+                <div class="label">Active Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="totalVolume">0</div>
+                <div class="label">Total Volume</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="totalWithdrawals">0</div>
+                <div class="label">Total Withdrawals</div>
+            </div>
+        </div>
+        
+        <!-- Facebook Tasks -->
+        <section class="platform-section">
+            <div class="platform-header">
+                <div class="platform-icon facebook-bg">
+                    <i class="fab fa-facebook-f"></i>
+                </div>
+                <div>
+                    <h2 class="platform-title">Facebook Tasks</h2>
+                    <p class="platform-subtitle">Complete Facebook tasks and earn rewards</p>
+                </div>
+            </div>
+            
+            <div class="tasks-grid" id="facebookTasks">
+                <!-- Facebook tasks will be loaded here -->
+            </div>
+        </section>
+        
+        <!-- Twitter Tasks -->
+        <section class="platform-section">
+            <div class="platform-header">
+                <div class="platform-icon twitter-bg">
+                    <i class="fab fa-twitter"></i>
+                </div>
+                <div>
+                    <h2 class="platform-title">Twitter Tasks</h2>
+                    <p class="platform-subtitle">Complete Twitter tasks and earn rewards</p>
+                </div>
+            </div>
+            
+            <div class="tasks-grid" id="twitterTasks">
+                <!-- Twitter tasks will be loaded here -->
+            </div>
+        </section>
+        
+        <!-- Instagram Tasks -->
+        <section class="platform-section">
+            <div class="platform-header">
+                <div class="platform-icon instagram-bg">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div>
+                    <h2 class="platform-title">Instagram Tasks</h2>
+                    <p class="platform-subtitle">Complete Instagram tasks and earn rewards</p>
+                </div>
+            </div>
+            
+            <div class="tasks-grid" id="instagramTasks">
+                <!-- Instagram tasks will be loaded here -->
+            </div>
+        </section>
+        
+        <!-- YouTube Tasks -->
+        <section class="platform-section">
+            <div class="platform-header">
+                <div class="platform-icon youtube-bg">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <div>
+                    <h2 class="platform-title">YouTube Tasks</h2>
+                    <p class="platform-subtitle">Complete YouTube tasks and earn rewards</p>
+                </div>
+            </div>
+            
+            <div class="tasks-grid" id="youtubeTasks">
+                <!-- YouTube tasks will be loaded here -->
+            </div>
+        </section>
+        
+        <!-- Telegram Tasks -->
+        <section class="platform-section">
+            <div class="platform-header">
+                <div class="platform-icon telegram-bg">
+                    <i class="fab fa-telegram"></i>
+                </div>
+                <div>
+                    <h2 class="platform-title">Telegram Tasks</h2>
+                    <p class="platform-subtitle">Complete Telegram tasks and earn rewards</p>
+                </div>
+            </div>
+            
+            <div class="tasks-grid" id="telegramTasks">
+                <!-- Telegram tasks will be loaded here -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Register New Account</h2>
+                <button class="close-modal" id="closeRegisterModal">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="form-label" for="uplineAddress">Upline Address *</label>
+                    <input type="text" class="form-input" id="uplineAddress" placeholder="Enter upline wallet address (0x...)" required>
+                    <small style="color: var(--text-secondary); font-size: 12px; margin-top: 5px; display: block;">
+                        Enter the wallet address of the person who referred you
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Registration Fee: 30 USDT</label>
+                    <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 10px; margin-top: 10px;">
+                        <p style="color: var(--text-secondary); font-size: 14px;">
+                            <i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 8px;"></i>
+                            After registration, you need to activate your account to start earning
+                        </p>
+                    </div>
+                </div>
+                <button type="submit" class="modal-btn primary-btn" id="submitRegisterBtn">
+                    Register Account
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Activation Modal -->
+    <div class="modal" id="activateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Activate Your Account</h2>
+                <button class="close-modal" id="closeActivateModal">&times;</button>
+            </div>
+            <div style="margin-bottom: 25px;">
+                <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                    Activate your account to start earning daily rewards and completing tasks.
+                </p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <i class="fas fa-gift" style="color: var(--accent-color); font-size: 20px;"></i>
+                        <div>
+                            <div style="font-weight: 600; color: var(--accent-color);">Activation Bonus: 100 VNTT</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Credited immediately after activation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Activation Fee: 30 USDT</label>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
+                    This one-time fee gives you access to all platform features
+                </p>
+            </div>
+            <button class="modal-btn success-btn" id="submitActivateBtn">
+                <i class="fas fa-bolt"></i> Pay & Activate Account
+            </button>
+        </div>
+    </div>
+    
+    <!-- Task Instructions Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="taskModalTitle">Task Instructions</h2>
+                <button class="close-modal" id="closeTaskModal">&times;</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <div id="taskModalPlatform" class="platform-icon" style="width: 40px; height: 40px; font-size: 18px;"></div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 18px;" id="taskModalName"></div>
+                        <div style="color: var(--text-secondary); font-size: 14px;" id="taskModalType"></div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-gem" style="color: var(--warning-color); font-size: 20px;"></i>
+                        <div>
+                            <div style="font-weight: 600; color: var(--warning-color);">Reward: <span id="taskModalReward">0</span> VNTT</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Will be credited to your account after verification</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions-list">
+                <h3 style="margin-bottom: 15px; font-size: 16px;">Follow these steps:</h3>
+                <div id="taskInstructions"></div>
+            </div>
+            
+            <button class="modal-btn primary-btn" id="completeTaskBtn">
+                <i class="fas fa-check-circle"></i> Mark as Completed
+            </button>
+        </div>
+    </div>
+    
+    <!-- Withdrawal Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Withdraw Tokens</h2>
+                <button class="close-modal" id="closeWithdrawModal">&times;</button>
+            </div>
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label class="form-label" for="withdrawAmount">Amount to Withdraw (VNTT)</label>
+                    <input type="number" class="form-input" id="withdrawAmount" placeholder="Enter amount" required>
+                    <div style="margin-top: 10px;">
+                        <div style="font-size: 12px; color: var(--text-secondary);">
+                            Available: <span id="availableBalance">0</span> VNTT
+                        </div>
+                        <div style="font-size: 12px; color: var(--warning-color); margin-top: 5px;">
+                            Withdrawal Fee: 10 VNTT
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fee Payment Method</label>
+                    <div style="display: flex; gap: 15px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="feeMethod" value="usdt" checked>
+                            <span>Pay 10 USDT</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="radio" name="feeMethod" value="vnt">
+                            <span>Pay 10 VNT</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="modal-btn primary-btn" id="submitWithdrawBtn">
+                    <i class="fas fa-download"></i> Withdraw Tokens
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" id="toastIcon"></i>
+        <div>
+            <div id="toastTitle" style="font-weight: 600;"></div>
+            <div id="toastMessage" style="font-size: 13px; color: var(--text-secondary);"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
