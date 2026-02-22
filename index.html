@@ -3,968 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VNetwork - Dashboard</title>
+    <title>VNTT Diamond Referral System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        body {
-            background: #0f172a;
-            min-height: 100vh;
-            color: #fff;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .wallet-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .wallet-info {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-family: monospace;
-            font-size: 16px;
-        }
-
-        .connect-btn {
-            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .connect-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
-        }
-
-        .connect-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* User Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #0ea5e9;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-
-        /* Main Action Cards */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .action-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
-            border-color: #0ea5e9;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .activation-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .daily-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .referral-icon { background: linear-gradient(135deg, #10b981, #059669); }
-        .link-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .card-subtitle {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .fee-badge {
-            display: inline-block;
-            padding: 8px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            font-size: 14px;
-            margin: 15px 0;
-        }
-
-        .action-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            font-size: 16px;
-        }
-
-        .activate-btn {
-            background: linear-gradient(90deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .daily-btn {
-            background: linear-gradient(90deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .action-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .action-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .bonus-info {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 10px;
-            padding: 12px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .bonus-info i { color: #10b981; }
-
-        /* Referral Cards Grid - 10 Levels */
-        .referral-section {
-            margin-top: 50px;
-        }
-
-        .section-title {
-            font-size: 24px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-        }
-
-        .levels-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .level-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .level-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .level-number {
-            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .level-income {
-            color: #10b981;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .member-list {
-            list-style: none;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .member-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 13px;
-        }
-
-        .member-address {
-            font-family: monospace;
-            color: #94a3b8;
-        }
-
-        .member-income {
-            color: #10b981;
-        }
-
-        .total-members {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            color: #94a3b8;
-        }
-
-        /* Referral Link Card */
-        .referral-link-card {
-            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 40px 0;
-        }
-
-        .link-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .referral-link {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 20px;
-            border-radius: 12px;
-            color: white;
-            font-family: monospace;
-            font-size: 14px;
-            min-width: 250px;
-        }
-
-        .copy-btn {
-            background: white;
-            color: #0ea5e9;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-        }
-
-        .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #0ea5e9;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #1e293b;
-            border-radius: 10px;
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateX(150%);
-            transition: transform 0.3s;
-            z-index: 1001;
-            color: #fff;
-            border-left: 4px solid;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.success { border-left-color: #10b981; }
-        .toast.error { border-left-color: #ef4444; }
-        .toast.info { border-left-color: #0ea5e9; }
-
-        .toast i {
-            font-size: 20px;
-        }
-
-        .toast.success i { color: #10b981; }
-        .toast.error i { color: #ef4444; }
-        .toast.info i { color: #0ea5e9; }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .toast-message {
-            font-size: 13px;
-            color: #94a3b8;
-        }
-
-        @media (max-width: 768px) {
-            .actions-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .levels-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .link-container {
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="diamond-shine"></div>
+        <div class="floating-diamonds"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-gem"></i>
+                <span>VNTT DIAMOND</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#referral">Referral</a>
+                <a href="#stats">Stats</a>
+            </div>
+            <div class="wallet-section">
+                <button id="connectWallet" class="connect-wallet-btn">
+                    <i class="fas fa-wallet"></i>
+                    <span>Connect Wallet</span>
+                </button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span class="wallet-address"></span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <h1 class="glowing-text">VNTT DIAMOND</h1>
+                <h2 class="gradient-text">10 Level Referral System</h2>
+                <div class="hero-stats">
+                    <div class="stat-card diamond">
+                        <i class="fas fa-users"></i>
+                        <span id="totalUsers">0</span>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-card diamond">
+                        <i class="fas fa-coins"></i>
+                        <span id="totalRewards">0</span>
+                        <p>Total Rewards</p>
+                    </div>
+                    <div class="stat-card diamond">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span id="timeRemaining">0</span>
+                        <p>Time Remaining</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="dashboard-section">
+            <h2 class="section-title"><i class="fas fa-gem"></i> Your Dashboard</h2>
+            
+            <!-- Activation Card -->
+            <div id="activationCard" class="card activation-card">
+                <div class="card-header">
+                    <i class="fas fa-key"></i>
+                    <h3>Activate Account</h3>
+                </div>
+                <div class="card-body">
+                    <div class="fee-info">
+                        <span>Activation Fee:</span>
+                        <strong>0.30 USDT</strong>
+                    </div>
+                    <div class="referral-input">
+                        <label>Referrer Address</label>
+                        <input type="text" id="referrerAddress" placeholder="Enter referrer address (0x...)">
+                    </div>
+                    <button id="activateBtn" class="btn-primary diamond-btn" disabled>
+                        <i class="fas fa-bolt"></i>
+                        Activate Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Stats Cards -->
+            <div id="userDashboard" class="user-dashboard hidden">
+                <div class="stats-grid">
+                    <div class="stat-card premium">
+                        <i class="fas fa-coins"></i>
+                        <span class="stat-label">Virtual Balance</span>
+                        <span id="virtualBalance" class="stat-value">0 VNTT</span>
+                    </div>
+                    <div class="stat-card premium">
+                        <i class="fas fa-calendar-check"></i>
+                        <span class="stat-label">Daily Reward</span>
+                        <span id="dailyReward" class="stat-value">100 VNTT</span>
+                        <button id="claimDailyBtn" class="btn-small diamond-btn">
+                            <i class="fas fa-gift"></i> Claim
+                        </button>
+                    </div>
+                    <div class="stat-card premium">
+                        <i class="fas fa-users"></i>
+                        <span class="stat-label">Total Referrals</span>
+                        <span id="totalReferrals" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card premium">
+                        <i class="fas fa-gem"></i>
+                        <span class="stat-label">Referral Earnings</span>
+                        <span id="referralEarnings" class="stat-value">0 VNTT</span>
+                    </div>
+                </div>
+
+                <!-- Withdrawal Section (after project end) -->
+                <div id="withdrawalSection" class="withdrawal-section hidden">
+                    <h3>Withdraw Your Earnings</h3>
+                    <div class="withdrawal-options">
+                        <div class="option-card">
+                            <h4>Pay with USDT</h4>
+                            <p>Fee: <span id="withdrawalFeeUSDT">0</span> USDT</p>
+                            <button id="withdrawUSDTBtn" class="btn-secondary">Withdraw with USDT</button>
+                        </div>
+                        <div class="option-card">
+                            <h4>Pay with VNT</h4>
+                            <p>Fee: <span id="withdrawalFeeVNT">0</span> VNT</p>
+                            <button id="withdrawVNTBtn" class="btn-secondary">Withdraw with VNT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 Level Referral Section -->
+        <section id="referral" class="referral-section">
+            <h2 class="section-title"><i class="fas fa-sitemap"></i> 10 Level Referral System</h2>
+            
+            <div class="referral-grid">
+                <!-- Level 1 Card -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-1">
+                        <span class="level-badge">Level 1</span>
+                        <span class="level-reward">100 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level1Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level1Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(1)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 2 Card -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-2">
+                        <span class="level-badge">Level 2</span>
+                        <span class="level-reward">80 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level2Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level2Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(2)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 3 Card -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-3">
+                        <span class="level-badge">Level 3</span>
+                        <span class="level-reward">60 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level3Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level3Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(3)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 4 Card -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-4">
+                        <span class="level-badge">Level 4</span>
+                        <span class="level-reward">40 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level4Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level4Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(4)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 5 Card -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-5">
+                        <span class="level-badge">Level 5</span>
+                        <span class="level-reward">20 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level5Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level5Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(5)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 6-10 Cards (similar pattern) -->
+                <!-- Level 6 -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-6">
+                        <span class="level-badge">Level 6</span>
+                        <span class="level-reward">10 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level6Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level6Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(6)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 7 -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-7">
+                        <span class="level-badge">Level 7</span>
+                        <span class="level-reward">10 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level7Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level7Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(7)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 8 -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-8">
+                        <span class="level-badge">Level 8</span>
+                        <span class="level-reward">10 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level8Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level8Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(8)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 9 -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-9">
+                        <span class="level-badge">Level 9</span>
+                        <span class="level-reward">10 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level9Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level9Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(9)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Level 10 -->
+                <div class="level-card diamond-level">
+                    <div class="level-header level-10">
+                        <span class="level-badge">Level 10</span>
+                        <span class="level-reward">10 VNTT</span>
+                    </div>
+                    <div class="level-body">
+                        <div class="level-stats">
+                            <i class="fas fa-user-plus"></i>
+                            <span id="level10Count">0</span> Members
+                        </div>
+                        <div class="level-earnings">
+                            <i class="fas fa-coins"></i>
+                            <span id="level10Earnings">0</span> VNTT
+                        </div>
+                        <button class="view-level-btn" onclick="showLevelDetails(10)">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal for Level Details -->
+        <div id="levelModal" class="modal">
+            <div class="modal-content glass-modal">
+                <span class="close-modal">&times;</span>
+                <h3 id="modalLevelTitle">Level <span></span> Details</h3>
+                <div class="modal-body">
+                    <div class="members-list" id="levelMembersList">
+                        <!-- Members will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas" id="toastIcon"></i>
-        <div class="toast-content">
-            <div class="toast-title" id="toastTitle"></div>
-            <div class="toast-message" id="toastMessage"></div>
-        </div>
+    <div id="toast" class="toast hidden">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage"></span>
     </div>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>VNetwork Dashboard</h1>
-            <div class="wallet-section">
-                <div class="wallet-info" id="walletAddress">
-                    <i class="fas fa-wallet"></i> Not Connected
-                </div>
-                <button class="connect-btn" id="connectWalletBtn">
-                    <i class="fas fa-plug"></i> Connect Wallet
-                </button>
-            </div>
-        </div>
-
-        <!-- User Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="totalEarned">0</div>
-                <div class="stat-label">Total Earned (VNTT)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="currentBalance">0</div>
-                <div class="stat-label">Available Balance (VNTT)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="totalReferrals">0</div>
-                <div class="stat-label">Total Referrals</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="teamIncome">0</div>
-                <div class="stat-label">Team Income (VNTT)</div>
-            </div>
-        </div>
-
-        <!-- Main Action Cards -->
-        <div class="actions-grid">
-            <!-- Activation Card -->
-            <div class="action-card">
-                <div class="card-header">
-                    <div class="card-icon activation-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div>
-                        <div class="card-title">Account Activation</div>
-                        <div class="card-subtitle">Activate your account to start earning</div>
-                    </div>
-                </div>
-                
-                <div class="fee-badge" id="activationFeeDisplay">
-                    <i class="fas fa-coins"></i> Fee: 30 USDT
-                </div>
-                
-                <div class="bonus-info">
-                    <i class="fas fa-gift"></i>
-                    <span>Bonus: 100 VNTT on activation</span>
-                </div>
-                
-                <button class="action-btn activate-btn" id="activateBtn" disabled>
-                    <i class="fas fa-bolt"></i> Activate Account
-                </button>
-            </div>
-
-            <!-- Daily Claim Card -->
-            <div class="action-card">
-                <div class="card-header">
-                    <div class="card-icon daily-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div>
-                        <div class="card-title">Daily Claim</div>
-                        <div class="card-subtitle">Claim your daily rewards</div>
-                    </div>
-                </div>
-                
-                <div class="fee-badge">
-                    <i class="fas fa-clock"></i> Every 24 hours
-                </div>
-                
-                <div class="bonus-info">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Reward: 100 VNTT per day</span>
-                </div>
-                
-                <button class="action-btn daily-btn" id="dailyClaimBtn" disabled>
-                    <i class="fas fa-calendar-day"></i> Claim Daily
-                </button>
-            </div>
-        </div>
-
-        <!-- Referral Link Card -->
-        <div class="referral-link-card">
-            <h3 style="margin-bottom: 10px;">Your Referral Link</h3>
-            <p style="opacity: 0.9; margin-bottom: 15px;">Share this link with your friends</p>
-            <div class="link-container">
-                <input type="text" class="referral-link" id="referralLink" readonly value="Connect wallet first">
-                <button class="copy-btn" id="copyLinkBtn">
-                    <i class="fas fa-copy"></i> Copy
-                </button>
-            </div>
-        </div>
-
-        <!-- 10 Level Referral Cards -->
-        <div class="referral-section">
-            <div class="section-title">
-                <i class="fas fa-sitemap"></i>
-                <span>Your 10-Level Team Structure</span>
-            </div>
-            
-            <div class="levels-grid" id="levelsGrid">
-                <!-- Level cards will be generated by JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
-    <script>
-        // Contract Configuration
-        const CONTRACT_ADDRESS = "0x660251F2CFcE9c0f9aED1e4f7aa75EF9f0618c8c";
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"},{"internalType":"address","name":"_feeWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Blacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"locked","type":"bool"}],"name":"ContractLocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"DailyClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"paused","type":"bool"}],"name":"EmergencyPaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldWallet","type":"address"},{"indexed":false,"internalType":"address","name":"newWallet","type":"address"}],"name":"FeeWalletUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"indexed":false,"internalType":"address","name":"updatedBy","type":"address"}],"name":"FrontendDataUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":false,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint256","name":"bonus","type":"uint256"}],"name":"PlatformBonusClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralEarned","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"lockedUntil","type":"uint256"}],"name":"ReserveFunded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReserveUnlocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"maxWithdrawalPerTx","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"maxDailyWithdrawal","type":"uint256"}],"name":"SecurityParametersUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"},{"indexed":false,"internalType":"bytes32","name":"taskName","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"SocialTaskAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"}],"name":"SocialTaskCompleted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"oldSupply","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"TokenSupplyUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Unblacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"UserActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"upline","type":"address"}],"name":"UserRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"},{"indexed":false,"internalType":"bool","name":"paidWithVNT","type":"bool"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"acceptOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activationBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activationFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activeUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"addSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"}],"name":"claimPlatformBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"completeSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractLocked","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyClaim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyWithdrawalAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"pause","type":"bool"}],"name":"emergencyPause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyPauseTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"emergencyPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawBNB","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"feeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"followSubscribeReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"forceActivate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"forceCompleteTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"frontendData","outputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"},{"internalType":"uint256","name":"lastUpdated","type":"uint256"},{"internalType":"address","name":"updatedBy","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"fundReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getAvailableWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getProjectStats","outputs":[{"internalType":"uint256","name":"_totalUsers","type":"uint256"},{"internalType":"uint256","name":"_activeUsers","type":"uint256"},{"internalType":"uint256","name":"_totalVolume","type":"uint256"},{"internalType":"uint256","name":"_totalWithdrawals","type":"uint256"},{"internalType":"uint256","name":"_totalTokensDistributed","type":"uint256"},{"internalType":"uint256","name":"_totalTokensAvailable","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getReserveInfo","outputs":[{"internalType":"bool","name":"funded","type":"bool"},{"internalType":"uint256","name":"lockedUntil","type":"uint256"},{"internalType":"uint256","name":"initialAmount","type":"uint256"},{"internalType":"uint256","name":"currentAvailable","type":"uint256"},{"internalType":"uint256","name":"distributed","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"getSocialTask","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSocialTasksCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserAdvancedInfo","outputs":[{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBasicInfo","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBonuses","outputs":[{"internalType":"uint256","name":"totalPlatformBonuses","type":"uint256"},{"internalType":"uint256","name":"totalReferralEarnings","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"initialReserveAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"isTaskCompleted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastActivityTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastClaimTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastWithdrawalTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"likeShareCommentReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"maxDailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxDailyWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxWithdrawalPerTx","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"minTimeBetweenActions","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectDuration","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reserveFunded","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"reserveLockedUntil","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"socialTasks","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"toggleProjectStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalTasksCompletedGlobal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensAvailable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensDistributed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensReserved","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalVolume","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"totalWithdrawnByUser","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unlockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_activationBonus","type":"uint256"}],"name":"updateActivationBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateActivationFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_dailyReward","type":"uint256"}],"name":"updateDailyReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newFeeWallet","type":"address"}],"name":"updateFeeWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"}],"name":"updateFrontendData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_followSubscribeReward","type":"uint256"},{"internalType":"uint256","name":"_likeShareCommentReward","type":"uint256"}],"name":"updateGlobalTaskRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"duration","type":"uint256"}],"name":"updateProjectDuration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"rewards","type":"uint256[]"}],"name":"updateReferralRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_maxWithdrawalPerTx","type":"uint256"},{"internalType":"uint256","name":"_maxDailyWithdrawal","type":"uint256"}],"name":"updateSecurityParameters","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"uint256","name":"reward","type":"uint256"}],"name":"updateTaskReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"updateTaskStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"}],"name":"updateTokenAddresses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"updateTotalTokenSupply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateWithdrawalFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersMain","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersStats","outputs":[{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"lastWithdrawalTime","type":"uint256"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"},{"internalType":"uint256","name":"lastActionTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vntToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vnttToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"whitelist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bool","name":"payWithVNT","type":"bool"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUnusedReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawalFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}];
-
-        // Global Variables
-        let web3 = null;
-        let contract = null;
-        let userAccount = null;
-        let isOwner = false;
-
-        // User Data - Real data from contract
-        let userData = {
-            isRegistered: false,
-            isActive: false,
-            totalEarned: '0',
-            balance: '0',
-            directReferrals: 0,
-            joinTime: 0,
-            activationTime: 0,
-            upline: null,
-            levelMembers: Array(10).fill().map(() => []),
-            levelIncome: Array(10).fill(0),
-            referralEarnings: Array(10).fill(0)
-        };
-
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', initApp);
-
-        async function initApp() {
-            if (typeof window.ethereum !== 'undefined') {
-                web3 = new Web3(window.ethereum);
-                setupEventListeners();
-                
-                // Check if already connected
-                try {
-                    const accounts = await web3.eth.getAccounts();
-                    if (accounts.length > 0) {
-                        userAccount = accounts[0];
-                        await connectContract();
-                        await loadUserData();
-                        updateUI();
-                    }
-                } catch (error) {
-                    console.log("Not connected");
-                }
-            } else {
-                showToast('Error', 'Please install MetaMask', 'error');
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-            document.getElementById('activateBtn').addEventListener('click', activateAccount);
-            document.getElementById('dailyClaimBtn').addEventListener('click', claimDaily);
-            document.getElementById('copyLinkBtn').addEventListener('click', copyReferralLink);
-
-            // MetaMask events
-            if (window.ethereum) {
-                window.ethereum.on('accountsChanged', handleAccountsChanged);
-                window.ethereum.on('chainChanged', () => window.location.reload());
-            }
-        }
-
-        async function connectWallet() {
-            try {
-                showLoading();
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAccount = accounts[0];
-                
-                await connectContract();
-                await autoRegister(); // Auto register on wallet connect
-                await loadUserData();
-                updateUI();
-                
-                showToast('Success', 'Wallet connected successfully', 'success');
-                hideLoading();
-                
-            } catch (error) {
-                hideLoading();
-                showToast('Error', 'Failed to connect wallet', 'error');
-            }
-        }
-
-        async function connectContract() {
-            try {
-                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-                
-                // Check if user is owner
-                const owner = await contract.methods.owner().call();
-                isOwner = (owner.toLowerCase() === userAccount.toLowerCase());
-                
-                // Get activation fee
-                const fee = await contract.methods.activationFee().call();
-                document.getElementById('activationFeeDisplay').innerHTML = `
-                    <i class="fas fa-coins"></i> Fee: ${web3.utils.fromWei(fee, 'ether')} USDT
-                `;
-                
-            } catch (error) {
-                console.error("Contract connection error:", error);
-            }
-        }
-
-        // Auto Register when wallet connects
-        async function autoRegister() {
-            try {
-                // Check if already registered
-                const userInfo = await contract.methods.getUserBasicInfo(userAccount).call();
-                
-                if (userInfo.joinTime == 0) {
-                    // Need to register
-                    showToast('Info', 'Auto registering...', 'info');
-                    
-                    // Get any active upline (you can modify this logic)
-                    const owner = await contract.methods.owner().call();
-                    
-                    await contract.methods.register(owner).send({ from: userAccount });
-                    showToast('Success', 'Auto registration successful', 'success');
-                }
-                
-            } catch (error) {
-                console.log("Auto registration error:", error);
-            }
-        }
-
-        // Load real user data from contract
-        async function loadUserData() {
-            try {
-                const userInfo = await contract.methods.getUserBasicInfo(userAccount).call();
-                const userAdvanced = await contract.methods.getUserAdvancedInfo(userAccount).call();
-                const userBonuses = await contract.methods.getUserBonuses(userAccount).call();
-                
-                userData = {
-                    isRegistered: userInfo.joinTime > 0,
-                    isActive: userInfo.isActive,
-                    totalEarned: userInfo.totalEarned,
-                    balance: userAdvanced.lockedTokens,
-                    directReferrals: userAdvanced.directReferrals,
-                    joinTime: userInfo.joinTime,
-                    activationTime: userInfo.activationTime,
-                    upline: userInfo.upline,
-                    levelIncome: Array(10).fill(0),
-                    referralEarnings: userBonuses.totalReferralEarnings
-                };
-                
-                // Load referral team data (you'll need to implement this based on your contract)
-                await loadReferralTeam();
-                
-                updateUI();
-                
-            } catch (error) {
-                console.error("Error loading user data:", error);
-            }
-        }
-
-        // Load referral team (you'll need to implement based on your contract structure)
-        async function loadReferralTeam() {
-            try {
-                // This is a placeholder - you need to implement based on your contract
-                // You might need events or additional contract functions to get referral data
-                
-                // Example: Load level 1 referrals
-                const level1Count = userData.directReferrals;
-                // ... load from your contract
-                
-                generateLevelCards();
-                
-            } catch (error) {
-                console.log("Error loading referral team:", error);
-            }
-        }
-
-        // Generate level cards with real data
-        function generateLevelCards() {
-            const levelsGrid = document.getElementById('levelsGrid');
-            levelsGrid.innerHTML = '';
-
-            for (let level = 1; level <= 10; level++) {
-                const members = userData.levelMembers[level - 1] || [];
-                const levelIncome = userData.levelIncome[level - 1] || 0;
-                
-                const card = document.createElement('div');
-                card.className = 'level-card';
-                
-                let membersHTML = '';
-                if (members.length > 0) {
-                    members.forEach(member => {
-                        membersHTML += `
-                            <li class="member-item">
-                                <span class="member-address">${member.address}</span>
-                                <span class="member-income">${member.income} VNTT</span>
-                            </li>
-                        `;
-                    });
-                } else {
-                    membersHTML = '<p style="color: #94a3b8; text-align: center; padding: 10px;">No members yet</p>';
-                }
-
-                card.innerHTML = `
-                    <div class="level-header">
-                        <span class="level-number">Level ${level}</span>
-                        <span class="level-income">${web3.utils.fromWei(levelIncome.toString(), 'ether')} VNTT</span>
-                    </div>
-                    <ul class="member-list">
-                        ${membersHTML}
-                    </ul>
-                    <div class="total-members">
-                        Total Members: ${members.length} | Income: ${web3.utils.fromWei(levelIncome.toString(), 'ether')} VNTT
-                    </div>
-                `;
-
-                levelsGrid.appendChild(card);
-            }
-        }
-
-        // Activate Account
-        async function activateAccount() {
-            try {
-                showLoading();
-                
-                // Get activation fee
-                const fee = await contract.methods.activationFee().call();
-                
-                // Check USDT allowance
-                const usdtAddress = await contract.methods.usdtToken().call();
-                const usdtContract = new web3.eth.Contract([
-                    {
-                        "constant": true,
-                        "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}],
-                        "name": "allowance",
-                        "outputs": [{"name": "", "type": "uint256"}],
-                        "type": "function"
-                    },
-                    {
-                        "constant": false,
-                        "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}],
-                        "name": "approve",
-                        "outputs": [{"name": "", "type": "bool"}],
-                        "type": "function"
-                    }
-                ], usdtAddress);
-                
-                const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
-                
-                if (allowance < fee) {
-                    // Approve USDT
-                    await usdtContract.methods.approve(CONTRACT_ADDRESS, fee).send({ from: userAccount });
-                }
-                
-                // Activate
-                await contract.methods.activate().send({ from: userAccount });
-                
-                showToast('Success', 'Account activated successfully! 100 VNTT bonus credited', 'success');
-                await loadUserData();
-                
-                hideLoading();
-                
-            } catch (error) {
-                hideLoading();
-                showToast('Error', error.message || 'Activation failed', 'error');
-            }
-        }
-
-        // Daily Claim
-        async function claimDaily() {
-            try {
-                showLoading();
-                
-                await contract.methods.dailyClaim().send({ from: userAccount });
-                
-                showToast('Success', 'Daily reward claimed: 100 VNTT', 'success');
-                await loadUserData();
-                
-                hideLoading();
-                
-            } catch (error) {
-                hideLoading();
-                showToast('Error', error.message || 'Claim failed', 'error');
-            }
-        }
-
-        // Copy Referral Link
-        function copyReferralLink() {
-            const linkInput = document.getElementById('referralLink');
-            linkInput.select();
-            document.execCommand('copy');
-            showToast('Success', 'Referral link copied to clipboard', 'success');
-        }
-
-        // Generate Referral Link
-        function generateReferralLink() {
-            if (userAccount) {
-                const baseUrl = window.location.origin + window.location.pathname;
-                const referralLink = `${baseUrl}?ref=${userAccount}`;
-                document.getElementById('referralLink').value = referralLink;
-            }
-        }
-
-        // Handle Account Change
-        function handleAccountsChanged(accounts) {
-            if (accounts.length === 0) {
-                userAccount = null;
-                document.getElementById('walletAddress').innerHTML = '<i class="fas fa-wallet"></i> Not Connected';
-                document.getElementById('activateBtn').disabled = true;
-                document.getElementById('dailyClaimBtn').disabled = true;
-            } else {
-                userAccount = accounts[0];
-                connectContract();
-                loadUserData();
-            }
-        }
-
-        // Update UI with real data
-        function updateUI() {
-            if (userAccount) {
-                const shortAddress = userAccount.substring(0, 6) + '...' + userAccount.substring(38);
-                document.getElementById('walletAddress').innerHTML = `
-                    <i class="fas fa-check-circle" style="color: #10b981;"></i> ${shortAddress}
-                `;
-                
-                // Generate referral link
-                generateReferralLink();
-                
-                // Update stats with real data
-                document.getElementById('totalEarned').textContent = web3.utils.fromWei(userData.totalEarned, 'ether');
-                document.getElementById('currentBalance').textContent = web3.utils.fromWei(userData.balance, 'ether');
-                document.getElementById('totalReferrals').textContent = userData.directReferrals;
-                document.getElementById('teamIncome').textContent = web3.utils.fromWei(userData.referralEarnings, 'ether');
-                
-                // Update button states
-                document.getElementById('activateBtn').disabled = userData.isActive;
-                document.getElementById('dailyClaimBtn').disabled = !userData.isActive;
-                
-                if (userData.isActive) {
-                    document.getElementById('activateBtn').innerHTML = '<i class="fas fa-check"></i> Activated';
-                }
-            }
-        }
-
-        // Loading functions
-        function showLoading() {
-            document.getElementById('loadingOverlay').classList.add('active');
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingOverlay').classList.remove('active');
-        }
-
-        // Toast function
-        function showToast(title, message, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-            
-            toastTitle.textContent = title;
-            toastMessage.textContent = message;
-            
-            toast.className = `toast ${type}`;
-            
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
-            };
-            
-            toastIcon.className = `fas ${icons[type]}`;
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5000);
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
