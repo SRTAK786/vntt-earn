@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VNetwork - Complete Dashboard</title>
+    <title>VNetwork - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #0f172a;
             min-height: 100vh;
             color: #fff;
             padding: 20px;
@@ -27,7 +27,7 @@
 
         /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
@@ -38,7 +38,7 @@
         .header h1 {
             font-size: 32px;
             margin-bottom: 10px;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -62,7 +62,7 @@
         }
 
         .connect-btn {
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -78,6 +78,13 @@
 
         .connect-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .connect-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* User Stats */
@@ -89,7 +96,7 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
@@ -100,12 +107,12 @@
         .stat-value {
             font-size: 32px;
             font-weight: 700;
-            color: #00d2ff;
+            color: #0ea5e9;
             margin-bottom: 5px;
         }
 
         .stat-label {
-            color: #aaa;
+            color: #94a3b8;
             font-size: 14px;
         }
 
@@ -118,7 +125,7 @@
         }
 
         .action-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
@@ -130,7 +137,7 @@
 
         .action-card:hover {
             transform: translateY(-5px);
-            border-color: #00d2ff;
+            border-color: #0ea5e9;
         }
 
         .card-header {
@@ -150,10 +157,10 @@
             font-size: 24px;
         }
 
-        .activation-icon { background: linear-gradient(135deg, #ff6b6b, #ff4757); }
-        .daily-icon { background: linear-gradient(135deg, #ffa502, #ff7f50); }
-        .referral-icon { background: linear-gradient(135deg, #7bed9f, #2ed573); }
-        .link-icon { background: linear-gradient(135deg, #70a1ff, #1e90ff); }
+        .activation-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .daily-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .referral-icon { background: linear-gradient(135deg, #10b981, #059669); }
+        .link-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 
         .card-title {
             font-size: 20px;
@@ -161,7 +168,7 @@
         }
 
         .card-subtitle {
-            color: #aaa;
+            color: #94a3b8;
             font-size: 14px;
             margin-top: 5px;
         }
@@ -188,19 +195,20 @@
             justify-content: center;
             gap: 10px;
             margin-top: 15px;
+            font-size: 16px;
         }
 
         .activate-btn {
-            background: linear-gradient(90deg, #ff6b6b, #ff4757);
+            background: linear-gradient(90deg, #ef4444, #dc2626);
             color: white;
         }
 
         .daily-btn {
-            background: linear-gradient(90deg, #ffa502, #ff7f50);
+            background: linear-gradient(90deg, #f59e0b, #d97706);
             color: white;
         }
 
-        .action-btn:hover {
+        .action-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
@@ -212,8 +220,8 @@
         }
 
         .bonus-info {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 10px;
             padding: 12px;
             margin: 15px 0;
@@ -221,6 +229,8 @@
             align-items: center;
             gap: 10px;
         }
+
+        .bonus-info i { color: #10b981; }
 
         /* Referral Cards Grid - 10 Levels */
         .referral-section {
@@ -233,6 +243,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #fff;
         }
 
         .levels-grid {
@@ -243,7 +254,7 @@
         }
 
         .level-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
@@ -260,7 +271,7 @@
         }
 
         .level-number {
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 14px;
@@ -268,7 +279,7 @@
         }
 
         .level-income {
-            color: #7bed9f;
+            color: #10b981;
             font-size: 18px;
             font-weight: 700;
         }
@@ -290,11 +301,11 @@
 
         .member-address {
             font-family: monospace;
-            color: #aaa;
+            color: #94a3b8;
         }
 
         .member-income {
-            color: #7bed9f;
+            color: #10b981;
         }
 
         .total-members {
@@ -304,11 +315,12 @@
             border-radius: 8px;
             text-align: center;
             font-size: 14px;
+            color: #94a3b8;
         }
 
         /* Referral Link Card */
         .referral-link-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
             border-radius: 20px;
             padding: 30px;
             margin: 40px 0;
@@ -335,7 +347,7 @@
 
         .copy-btn {
             background: white;
-            color: #667eea;
+            color: #0ea5e9;
             border: none;
             padding: 15px 30px;
             border-radius: 12px;
@@ -352,8 +364,8 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Modals */
-        .modal {
+        /* Loading Overlay */
+        .loading-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -362,68 +374,27 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
-            z-index: 1000;
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
 
-        .modal.active {
+        .loading-overlay.active {
             display: flex;
         }
 
-        .modal-content {
-            background: #1e272e;
-            border-radius: 20px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            font-size: 24px;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 24px;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #0ea5e9;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            animation: spin 1s linear infinite;
         }
 
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .fee-slider {
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        .fee-display {
-            font-size: 20px;
-            font-weight: 700;
-            color: #00d2ff;
-            text-align: center;
-            margin: 15px 0;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Toast */
@@ -431,7 +402,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: white;
+            background: #1e293b;
             border-radius: 10px;
             padding: 15px 25px;
             display: flex;
@@ -440,16 +411,40 @@
             transform: translateX(150%);
             transition: transform 0.3s;
             z-index: 1001;
-            color: #333;
+            color: #fff;
+            border-left: 4px solid;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .toast.show {
             transform: translateX(0);
         }
 
-        .toast.success { border-left: 4px solid #7bed9f; }
-        .toast.error { border-left: 4px solid #ff4757; }
-        .toast.info { border-left: 4px solid #00d2ff; }
+        .toast.success { border-left-color: #10b981; }
+        .toast.error { border-left-color: #ef4444; }
+        .toast.info { border-left-color: #0ea5e9; }
+
+        .toast i {
+            font-size: 20px;
+        }
+
+        .toast.success i { color: #10b981; }
+        .toast.error i { color: #ef4444; }
+        .toast.info i { color: #0ea5e9; }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: #94a3b8;
+        }
 
         @media (max-width: 768px) {
             .actions-grid {
@@ -467,16 +462,30 @@
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas" id="toastIcon"></i>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle"></div>
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🇮🇳 VNetwork Main - हिंदी में</h1>
+            <h1>VNetwork Dashboard</h1>
             <div class="wallet-section">
                 <div class="wallet-info" id="walletAddress">
-                    <i class="fas fa-wallet"></i> कनेक्ट नहीं है
+                    <i class="fas fa-wallet"></i> Not Connected
                 </div>
                 <button class="connect-btn" id="connectWalletBtn">
-                    <i class="fas fa-plug"></i> वॉलेट कनेक्ट करें
+                    <i class="fas fa-plug"></i> Connect Wallet
                 </button>
             </div>
         </div>
@@ -485,19 +494,19 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value" id="totalEarned">0</div>
-                <div class="stat-label">कुल कमाई</div>
+                <div class="stat-label">Total Earned (VNTT)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="currentBalance">0</div>
-                <div class="stat-label">उपलब्ध बैलेंस</div>
+                <div class="stat-label">Available Balance (VNTT)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="totalReferrals">0</div>
-                <div class="stat-label">कुल रेफरल</div>
+                <div class="stat-label">Total Referrals</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="totalTeamIncome">0</div>
-                <div class="stat-label">टीम इनकम</div>
+                <div class="stat-value" id="teamIncome">0</div>
+                <div class="stat-label">Team Income (VNTT)</div>
             </div>
         </div>
 
@@ -510,22 +519,22 @@
                         <i class="fas fa-bolt"></i>
                     </div>
                     <div>
-                        <div class="card-title">एक्टिवेशन</div>
-                        <div class="card-subtitle">अपना अकाउंट एक्टिवेट करें</div>
+                        <div class="card-title">Account Activation</div>
+                        <div class="card-subtitle">Activate your account to start earning</div>
                     </div>
                 </div>
                 
                 <div class="fee-badge" id="activationFeeDisplay">
-                    <i class="fas fa-coins"></i> फीस: 30 USDT
+                    <i class="fas fa-coins"></i> Fee: 30 USDT
                 </div>
                 
                 <div class="bonus-info">
-                    <i class="fas fa-gift" style="color: #ffd700;"></i>
-                    <span>बोनस: 100 VNTT मिलेगा</span>
+                    <i class="fas fa-gift"></i>
+                    <span>Bonus: 100 VNTT on activation</span>
                 </div>
                 
                 <button class="action-btn activate-btn" id="activateBtn" disabled>
-                    <i class="fas fa-bolt"></i> एक्टिवेट करें
+                    <i class="fas fa-bolt"></i> Activate Account
                 </button>
             </div>
 
@@ -536,34 +545,34 @@
                         <i class="fas fa-calendar-day"></i>
                     </div>
                     <div>
-                        <div class="card-title">डेली क्लेम</div>
-                        <div class="card-subtitle">रोजाना 100 VNTT पाएं</div>
+                        <div class="card-title">Daily Claim</div>
+                        <div class="card-subtitle">Claim your daily rewards</div>
                     </div>
                 </div>
                 
                 <div class="fee-badge">
-                    <i class="fas fa-clock"></i> हर 24 घंटे में
+                    <i class="fas fa-clock"></i> Every 24 hours
                 </div>
                 
                 <div class="bonus-info">
-                    <i class="fas fa-check-circle" style="color: #7bed9f;"></i>
-                    <span>एक्टिव अकाउंट के लिए</span>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Reward: 100 VNTT per day</span>
                 </div>
                 
                 <button class="action-btn daily-btn" id="dailyClaimBtn" disabled>
-                    <i class="fas fa-calendar-day"></i> क्लेम करें
+                    <i class="fas fa-calendar-day"></i> Claim Daily
                 </button>
             </div>
         </div>
 
         <!-- Referral Link Card -->
         <div class="referral-link-card">
-            <h3 style="margin-bottom: 10px;">आपका रेफरल लिंक</h3>
-            <p style="opacity: 0.9; margin-bottom: 15px;">इस लिंक से जुड़ेंगे आपके डाउनलाइन</p>
+            <h3 style="margin-bottom: 10px;">Your Referral Link</h3>
+            <p style="opacity: 0.9; margin-bottom: 15px;">Share this link with your friends</p>
             <div class="link-container">
-                <input type="text" class="referral-link" id="referralLink" readonly value="पहले वॉलेट कनेक्ट करें">
-                <button class="copy-btn" id="copyLinkBtn" onclick="copyReferralLink()">
-                    <i class="fas fa-copy"></i> कॉपी करें
+                <input type="text" class="referral-link" id="referralLink" readonly value="Connect wallet first">
+                <button class="copy-btn" id="copyLinkBtn">
+                    <i class="fas fa-copy"></i> Copy
                 </button>
             </div>
         </div>
@@ -572,171 +581,189 @@
         <div class="referral-section">
             <div class="section-title">
                 <i class="fas fa-sitemap"></i>
-                <span>आपकी 10 लेवल टीम</span>
+                <span>Your 10-Level Team Structure</span>
             </div>
             
             <div class="levels-grid" id="levelsGrid">
-                <!-- JavaScript से 10 कार्ड जनरेट होंगे -->
+                <!-- Level cards will be generated by JavaScript -->
             </div>
         </div>
     </div>
 
-    <!-- Activation Fee Change Modal (Only for Owner) -->
-    <div class="modal" id="feeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>एक्टिवेशन फीस बदलें</h2>
-                <button class="close-modal" onclick="closeModal('feeModal')">&times;</button>
-            </div>
-            
-            <p style="color: #aaa; margin-bottom: 20px;">
-                आप USDT में फीस बदल सकते हैं (केवल ओनर के लिए)
-            </p>
-            
-            <input type="range" class="fee-slider" id="feeSlider" min="10" max="1000" value="30" step="5">
-            <div class="fee-display" id="feeValue">30 USDT</div>
-            
-            <button class="action-btn activate-btn" onclick="updateActivationFee()">
-                <i class="fas fa-save"></i> फीस अपडेट करें
-            </button>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas fa-info-circle" id="toastIcon"></i>
-        <div>
-            <div id="toastTitle" style="font-weight: 600;"></div>
-            <div id="toastMessage" style="font-size: 13px;"></div>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
-        // Contract Address - यहाँ अपना कॉन्ट्रैक्ट एड्रेस डालें
+        // Contract Configuration
         const CONTRACT_ADDRESS = "0x660251F2CFcE9c0f9aED1e4f7aa75EF9f0618c8c";
-        
+        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"},{"internalType":"address","name":"_feeWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Blacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"locked","type":"bool"}],"name":"ContractLocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"DailyClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"paused","type":"bool"}],"name":"EmergencyPaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"EmergencyWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldWallet","type":"address"},{"indexed":false,"internalType":"address","name":"newWallet","type":"address"}],"name":"FeeWalletUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"indexed":false,"internalType":"address","name":"updatedBy","type":"address"}],"name":"FrontendDataUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":false,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint256","name":"bonus","type":"uint256"}],"name":"PlatformBonusClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralEarned","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"lockedUntil","type":"uint256"}],"name":"ReserveFunded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReserveUnlocked","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"maxWithdrawalPerTx","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"maxDailyWithdrawal","type":"uint256"}],"name":"SecurityParametersUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"},{"indexed":false,"internalType":"bytes32","name":"taskName","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"SocialTaskAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"taskId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"platform","type":"uint8"},{"indexed":false,"internalType":"uint8","name":"taskType","type":"uint8"}],"name":"SocialTaskCompleted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"oldSupply","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"TokenSupplyUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"}],"name":"Unblacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"UserActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"address","name":"upline","type":"address"}],"name":"UserRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"},{"indexed":false,"internalType":"bool","name":"paidWithVNT","type":"bool"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"acceptOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activationBonus","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activationFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"activeUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"addSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"addToWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"platform","type":"uint8"}],"name":"claimPlatformBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"completeSocialTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractLocked","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyClaim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"dailyReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"dailyWithdrawalAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"pause","type":"bool"}],"name":"emergencyPause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyPauseTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"emergencyPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawBNB","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"emergencyWithdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"feeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"followSubscribeReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"forceActivate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"forceCompleteTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"frontendData","outputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"},{"internalType":"uint256","name":"lastUpdated","type":"uint256"},{"internalType":"address","name":"updatedBy","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"fundReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getAvailableWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getProjectStats","outputs":[{"internalType":"uint256","name":"_totalUsers","type":"uint256"},{"internalType":"uint256","name":"_activeUsers","type":"uint256"},{"internalType":"uint256","name":"_totalVolume","type":"uint256"},{"internalType":"uint256","name":"_totalWithdrawals","type":"uint256"},{"internalType":"uint256","name":"_totalTokensDistributed","type":"uint256"},{"internalType":"uint256","name":"_totalTokensAvailable","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getReserveInfo","outputs":[{"internalType":"bool","name":"funded","type":"bool"},{"internalType":"uint256","name":"lockedUntil","type":"uint256"},{"internalType":"uint256","name":"initialAmount","type":"uint256"},{"internalType":"uint256","name":"currentAvailable","type":"uint256"},{"internalType":"uint256","name":"distributed","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"getSocialTask","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSocialTasksCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserAdvancedInfo","outputs":[{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBasicInfo","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserBonuses","outputs":[{"internalType":"uint256","name":"totalPlatformBonuses","type":"uint256"},{"internalType":"uint256","name":"totalReferralEarnings","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"initialReserveAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"taskId","type":"uint256"}],"name":"isTaskCompleted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastActivityTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastClaimTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"lastWithdrawalTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"likeShareCommentReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"maxDailyClaims","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxDailyWithdrawal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxWithdrawalPerTx","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"minTimeBetweenActions","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectDuration","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"removeFromWhitelist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reserveFunded","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"reserveLockedUntil","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"socialTasks","outputs":[{"internalType":"uint8","name":"platform","type":"uint8"},{"internalType":"uint8","name":"taskType","type":"uint8"},{"internalType":"bytes32","name":"taskName","type":"bytes32"},{"internalType":"uint256","name":"reward","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"toggleProjectStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalTasksCompletedGlobal","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensAvailable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensDistributed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensReserved","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalUsers","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalVolume","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"totalWithdrawnByUser","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unlockContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_activationBonus","type":"uint256"}],"name":"updateActivationBonus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateActivationFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_dailyReward","type":"uint256"}],"name":"updateDailyReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newFeeWallet","type":"address"}],"name":"updateFeeWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"websiteUrl","type":"bytes32"},{"internalType":"bytes32","name":"telegramUrl","type":"bytes32"},{"internalType":"bytes32","name":"twitterUrl","type":"bytes32"}],"name":"updateFrontendData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_followSubscribeReward","type":"uint256"},{"internalType":"uint256","name":"_likeShareCommentReward","type":"uint256"}],"name":"updateGlobalTaskRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"duration","type":"uint256"}],"name":"updateProjectDuration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"rewards","type":"uint256[]"}],"name":"updateReferralRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_maxWithdrawalPerTx","type":"uint256"},{"internalType":"uint256","name":"_maxDailyWithdrawal","type":"uint256"}],"name":"updateSecurityParameters","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"uint256","name":"reward","type":"uint256"}],"name":"updateTaskReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"taskId","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"name":"updateTaskStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"}],"name":"updateTokenAddresses","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newSupply","type":"uint256"}],"name":"updateTotalTokenSupply","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"fee","type":"uint256"}],"name":"updateWithdrawalFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersMain","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"uint256","name":"joinTime","type":"uint256"},{"internalType":"uint256","name":"activationTime","type":"uint256"},{"internalType":"uint256","name":"totalEarned","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"lockedTokens","type":"uint256"},{"internalType":"uint256","name":"lastClaimTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"usersStats","outputs":[{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"bool","name":"hasPaidActivation","type":"bool"},{"internalType":"uint256","name":"lastWithdrawalTime","type":"uint256"},{"internalType":"uint256","name":"userTasksCompleted","type":"uint256"},{"internalType":"uint256","name":"claimedToday","type":"uint256"},{"internalType":"uint256","name":"lastActionTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vntToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vnttToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"whitelist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bool","name":"payWithVNT","type":"bool"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUnusedReserve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawalFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}];
+
         // Global Variables
+        let web3 = null;
+        let contract = null;
         let userAccount = null;
         let isOwner = false;
-        let activationFee = 30; // Default 30 USDT
+
+        // User Data - Real data from contract
         let userData = {
             isRegistered: false,
             isActive: false,
-            totalEarned: 0,
-            balance: 0,
-            referrals: [],
-            teamIncome: 0,
+            totalEarned: '0',
+            balance: '0',
+            directReferrals: 0,
+            joinTime: 0,
+            activationTime: 0,
+            upline: null,
             levelMembers: Array(10).fill().map(() => []),
-            levelIncome: Array(10).fill(0)
+            levelIncome: Array(10).fill(0),
+            referralEarnings: Array(10).fill(0)
         };
 
         // Initialize App
-        document.addEventListener('DOMContentLoaded', function() {
-            checkWalletConnection();
-            generateLevelCards();
-        });
+        document.addEventListener('DOMContentLoaded', initApp);
 
-        // Check if wallet is already connected
-        async function checkWalletConnection() {
+        async function initApp() {
             if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                setupEventListeners();
+                
+                // Check if already connected
                 try {
-                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    const accounts = await web3.eth.getAccounts();
                     if (accounts.length > 0) {
                         userAccount = accounts[0];
-                        await handleWalletConnected();
+                        await connectContract();
+                        await loadUserData();
+                        updateUI();
                     }
                 } catch (error) {
-                    console.log("Error checking wallet:", error);
+                    console.log("Not connected");
                 }
+            } else {
+                showToast('Error', 'Please install MetaMask', 'error');
             }
         }
 
-        // Connect Wallet
-        document.getElementById('connectWalletBtn').addEventListener('click', async function() {
+        function setupEventListeners() {
+            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+            document.getElementById('activateBtn').addEventListener('click', activateAccount);
+            document.getElementById('dailyClaimBtn').addEventListener('click', claimDaily);
+            document.getElementById('copyLinkBtn').addEventListener('click', copyReferralLink);
+
+            // MetaMask events
+            if (window.ethereum) {
+                window.ethereum.on('accountsChanged', handleAccountsChanged);
+                window.ethereum.on('chainChanged', () => window.location.reload());
+            }
+        }
+
+        async function connectWallet() {
             try {
-                if (typeof window.ethereum === 'undefined') {
-                    showToast('MetaMask नहीं मिला', 'कृपया MetaMask इंस्टॉल करें', 'error');
-                    return;
-                }
-
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts' 
-                });
-                
+                showLoading();
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 userAccount = accounts[0];
-                await handleWalletConnected();
-
+                
+                await connectContract();
+                await autoRegister(); // Auto register on wallet connect
+                await loadUserData();
+                updateUI();
+                
+                showToast('Success', 'Wallet connected successfully', 'success');
+                hideLoading();
+                
             } catch (error) {
-                showToast('एरर', 'वॉलेट कनेक्ट नहीं हुआ', 'error');
-            }
-        });
-
-        // Handle Wallet Connected
-        async function handleWalletConnected() {
-            // Show wallet address
-            const shortAddress = userAccount.substring(0, 6) + '...' + userAccount.substring(38);
-            document.getElementById('walletAddress').innerHTML = `
-                <i class="fas fa-check-circle" style="color: #7bed9f;"></i> 
-                ${shortAddress}
-            `;
-
-            // Check if owner
-            isOwner = (userAccount.toLowerCase() === "0x660251F2CFcE9c0f9aED1e4f7aa75EF9f0618c8c".toLowerCase());
-
-            // Auto Register
-            await autoRegister();
-
-            // Generate referral link
-            generateReferralLink();
-
-            // Update UI
-            updateUI();
-
-            // Owner ke liye special option
-            if (isOwner) {
-                addOwnerControls();
+                hideLoading();
+                showToast('Error', 'Failed to connect wallet', 'error');
             }
         }
 
-        // Auto Register - Wallet connect hote hi register
+        async function connectContract() {
+            try {
+                contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+                
+                // Check if user is owner
+                const owner = await contract.methods.owner().call();
+                isOwner = (owner.toLowerCase() === userAccount.toLowerCase());
+                
+                // Get activation fee
+                const fee = await contract.methods.activationFee().call();
+                document.getElementById('activationFeeDisplay').innerHTML = `
+                    <i class="fas fa-coins"></i> Fee: ${web3.utils.fromWei(fee, 'ether')} USDT
+                `;
+                
+            } catch (error) {
+                console.error("Contract connection error:", error);
+            }
+        }
+
+        // Auto Register when wallet connects
         async function autoRegister() {
             try {
                 // Check if already registered
-                const isRegistered = checkRegistration(); // आपका contract call यहाँ आएगा
-
-                if (!isRegistered) {
-                    // Demo registration
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    userData.isRegistered = true;
-                    userData.isActive = false;
-                    
-                    showToast('रजिस्ट्रेशन सफल', 'आपका अकाउंट रजिस्टर हो गया', 'success');
-                }
+                const userInfo = await contract.methods.getUserBasicInfo(userAccount).call();
                 
-                updateUI();
+                if (userInfo.joinTime == 0) {
+                    // Need to register
+                    showToast('Info', 'Auto registering...', 'info');
+                    
+                    // Get any active upline (you can modify this logic)
+                    const owner = await contract.methods.owner().call();
+                    
+                    await contract.methods.register(owner).send({ from: userAccount });
+                    showToast('Success', 'Auto registration successful', 'success');
+                }
                 
             } catch (error) {
                 console.log("Auto registration error:", error);
             }
         }
 
-        // Generate Referral Link
-        function generateReferralLink() {
-            const baseUrl = window.location.origin + window.location.pathname;
-            const referralLink = `${baseUrl}?ref=${userAccount}`;
-            document.getElementById('referralLink').value = referralLink;
+        // Load real user data from contract
+        async function loadUserData() {
+            try {
+                const userInfo = await contract.methods.getUserBasicInfo(userAccount).call();
+                const userAdvanced = await contract.methods.getUserAdvancedInfo(userAccount).call();
+                const userBonuses = await contract.methods.getUserBonuses(userAccount).call();
+                
+                userData = {
+                    isRegistered: userInfo.joinTime > 0,
+                    isActive: userInfo.isActive,
+                    totalEarned: userInfo.totalEarned,
+                    balance: userAdvanced.lockedTokens,
+                    directReferrals: userAdvanced.directReferrals,
+                    joinTime: userInfo.joinTime,
+                    activationTime: userInfo.activationTime,
+                    upline: userInfo.upline,
+                    levelIncome: Array(10).fill(0),
+                    referralEarnings: userBonuses.totalReferralEarnings
+                };
+                
+                // Load referral team data (you'll need to implement this based on your contract)
+                await loadReferralTeam();
+                
+                updateUI();
+                
+            } catch (error) {
+                console.error("Error loading user data:", error);
+            }
         }
 
-        // Copy Referral Link
-        window.copyReferralLink = function() {
-            const linkInput = document.getElementById('referralLink');
-            linkInput.select();
-            document.execCommand('copy');
-            showToast('कॉपी हो गया', 'रेफरल लिंक कॉपी हो गया', 'success');
-        };
+        // Load referral team (you'll need to implement based on your contract structure)
+        async function loadReferralTeam() {
+            try {
+                // This is a placeholder - you need to implement based on your contract
+                // You might need events or additional contract functions to get referral data
+                
+                // Example: Load level 1 referrals
+                const level1Count = userData.directReferrals;
+                // ... load from your contract
+                
+                generateLevelCards();
+                
+            } catch (error) {
+                console.log("Error loading referral team:", error);
+            }
+        }
 
-        // Generate 10 Level Cards
+        // Generate level cards with real data
         function generateLevelCards() {
             const levelsGrid = document.getElementById('levelsGrid');
             levelsGrid.innerHTML = '';
@@ -747,7 +774,6 @@
                 
                 const card = document.createElement('div');
                 card.className = 'level-card';
-                card.id = `level-${level}-card`;
                 
                 let membersHTML = '';
                 if (members.length > 0) {
@@ -760,19 +786,19 @@
                         `;
                     });
                 } else {
-                    membersHTML = '<p style="color: #aaa; text-align: center; padding: 10px;">कोई मेंबर नहीं</p>';
+                    membersHTML = '<p style="color: #94a3b8; text-align: center; padding: 10px;">No members yet</p>';
                 }
 
                 card.innerHTML = `
                     <div class="level-header">
-                        <span class="level-number">लेवल ${level}</span>
-                        <span class="level-income">${levelIncome} VNTT</span>
+                        <span class="level-number">Level ${level}</span>
+                        <span class="level-income">${web3.utils.fromWei(levelIncome.toString(), 'ether')} VNTT</span>
                     </div>
                     <ul class="member-list">
                         ${membersHTML}
                     </ul>
                     <div class="total-members">
-                        कुल मेंबर: ${members.length} | इनकम: ${levelIncome} VNTT
+                        Total Members: ${members.length} | Income: ${web3.utils.fromWei(levelIncome.toString(), 'ether')} VNTT
                     </div>
                 `;
 
@@ -780,139 +806,140 @@
             }
         }
 
-        // Demo data for testing - बाद में contract से replace करें
-        function loadDemoData() {
-            // Demo level members
-            for (let i = 0; i < 10; i++) {
-                const memberCount = Math.floor(Math.random() * 5) + 1;
-                const members = [];
-                for (let j = 0; j < memberCount; j++) {
-                    members.push({
-                        address: `0x${Math.random().toString(36).substring(2, 8)}...${Math.random().toString(36).substring(2, 5)}`,
-                        income: (i + 1) * 10
-                    });
-                }
-                userData.levelMembers[i] = members;
-                userData.levelIncome[i] = members.reduce((sum, m) => sum + m.income, 0);
-            }
-            
-            userData.totalReferrals = userData.levelMembers.reduce((sum, level) => sum + level.length, 0);
-            userData.teamIncome = userData.levelIncome.reduce((sum, inc) => sum + inc, 0);
-            
-            generateLevelCards();
-        }
-
-        // Load demo data initially
-        loadDemoData();
-
-        // Update UI
-        function updateUI() {
-            // Update stats
-            document.getElementById('totalEarned').textContent = userData.totalEarned;
-            document.getElementById('currentBalance').textContent = userData.balance;
-            document.getElementById('totalReferrals').textContent = userData.totalReferrals || 0;
-            document.getElementById('totalTeamIncome').textContent = userData.teamIncome || 0;
-
-            // Update button states
-            const activateBtn = document.getElementById('activateBtn');
-            
-            if (userAccount) {
-                if (userData.isActive) {
-                    activateBtn.disabled = true;
-                    activateBtn.innerHTML = '<i class="fas fa-check"></i> एक्टिवेटेड';
-                } else {
-                    activateBtn.disabled = false;
-                }
-                
-                document.getElementById('dailyClaimBtn').disabled = !userData.isActive;
-            }
-        }
-
         // Activate Account
-        document.getElementById('activateBtn').addEventListener('click', async function() {
+        async function activateAccount() {
             try {
-                showToast('प्रोसेसिंग', 'एक्टिवेशन हो रहा है...', 'info');
+                showLoading();
                 
-                // Simulate activation - यहाँ contract call होगा
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Get activation fee
+                const fee = await contract.methods.activationFee().call();
                 
-                userData.isActive = true;
-                userData.balance += 100; // Activation bonus
-                userData.totalEarned += 100;
+                // Check USDT allowance
+                const usdtAddress = await contract.methods.usdtToken().call();
+                const usdtContract = new web3.eth.Contract([
+                    {
+                        "constant": true,
+                        "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}],
+                        "name": "allowance",
+                        "outputs": [{"name": "", "type": "uint256"}],
+                        "type": "function"
+                    },
+                    {
+                        "constant": false,
+                        "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}],
+                        "name": "approve",
+                        "outputs": [{"name": "", "type": "bool"}],
+                        "type": "function"
+                    }
+                ], usdtAddress);
                 
-                showToast('सफलता', 'आपका अकाउंट एक्टिवेट हो गया! 100 VNTT मिला', 'success');
-                updateUI();
+                const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
+                
+                if (allowance < fee) {
+                    // Approve USDT
+                    await usdtContract.methods.approve(CONTRACT_ADDRESS, fee).send({ from: userAccount });
+                }
+                
+                // Activate
+                await contract.methods.activate().send({ from: userAccount });
+                
+                showToast('Success', 'Account activated successfully! 100 VNTT bonus credited', 'success');
+                await loadUserData();
+                
+                hideLoading();
                 
             } catch (error) {
-                showToast('एरर', 'एक्टिवेशन फेल हुआ', 'error');
+                hideLoading();
+                showToast('Error', error.message || 'Activation failed', 'error');
             }
-        });
+        }
 
         // Daily Claim
-        document.getElementById('dailyClaimBtn').addEventListener('click', async function() {
+        async function claimDaily() {
             try {
-                showToast('प्रोसेसिंग', 'क्लेम हो रहा है...', 'info');
+                showLoading();
                 
-                // Simulate claim - यहाँ contract call होगा
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                await contract.methods.dailyClaim().send({ from: userAccount });
                 
-                userData.balance += 100;
-                userData.totalEarned += 100;
+                showToast('Success', 'Daily reward claimed: 100 VNTT', 'success');
+                await loadUserData();
                 
-                showToast('सफलता', '100 VNTT क्लेम हो गया', 'success');
-                updateUI();
+                hideLoading();
                 
             } catch (error) {
-                showToast('एरर', 'क्लेम फेल हुआ', 'error');
+                hideLoading();
+                showToast('Error', error.message || 'Claim failed', 'error');
             }
-        });
-
-        // Owner Controls
-        function addOwnerControls() {
-            // Add fee change button in activation card
-            const activationCard = document.querySelector('.action-card:first-child');
-            const feeChangeBtn = document.createElement('button');
-            feeChangeBtn.className = 'action-btn';
-            feeChangeBtn.style.background = 'linear-gradient(90deg, #70a1ff, #1e90ff)';
-            feeChangeBtn.style.marginTop = '10px';
-            feeChangeBtn.innerHTML = '<i class="fas fa-pen"></i> फीस बदलें (ओनर)';
-            feeChangeBtn.onclick = () => openModal('feeModal');
-            activationCard.appendChild(feeChangeBtn);
         }
 
-        // Open Modal
-        window.openModal = function(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        };
+        // Copy Referral Link
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            document.execCommand('copy');
+            showToast('Success', 'Referral link copied to clipboard', 'success');
+        }
 
-        // Close Modal
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        };
+        // Generate Referral Link
+        function generateReferralLink() {
+            if (userAccount) {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const referralLink = `${baseUrl}?ref=${userAccount}`;
+                document.getElementById('referralLink').value = referralLink;
+            }
+        }
 
-        // Fee Slider
-        const feeSlider = document.getElementById('feeSlider');
-        const feeValue = document.getElementById('feeValue');
-        
-        feeSlider.addEventListener('input', function() {
-            feeValue.textContent = this.value + ' USDT';
-            activationFee = this.value;
-        });
+        // Handle Account Change
+        function handleAccountsChanged(accounts) {
+            if (accounts.length === 0) {
+                userAccount = null;
+                document.getElementById('walletAddress').innerHTML = '<i class="fas fa-wallet"></i> Not Connected';
+                document.getElementById('activateBtn').disabled = true;
+                document.getElementById('dailyClaimBtn').disabled = true;
+            } else {
+                userAccount = accounts[0];
+                connectContract();
+                loadUserData();
+            }
+        }
 
-        // Update Activation Fee
-        window.updateActivationFee = function() {
-            // यहाँ contract call होगा
-            // await contract.methods.updateActivationFee(activationFee * 10**18).send({from: userAccount})
-            
-            document.getElementById('activationFeeDisplay').innerHTML = `
-                <i class="fas fa-coins"></i> फीस: ${activationFee} USDT
-            `;
-            
-            closeModal('feeModal');
-            showToast('सफलता', 'एक्टिवेशन फीस अपडेट हो गई', 'success');
-        };
+        // Update UI with real data
+        function updateUI() {
+            if (userAccount) {
+                const shortAddress = userAccount.substring(0, 6) + '...' + userAccount.substring(38);
+                document.getElementById('walletAddress').innerHTML = `
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i> ${shortAddress}
+                `;
+                
+                // Generate referral link
+                generateReferralLink();
+                
+                // Update stats with real data
+                document.getElementById('totalEarned').textContent = web3.utils.fromWei(userData.totalEarned, 'ether');
+                document.getElementById('currentBalance').textContent = web3.utils.fromWei(userData.balance, 'ether');
+                document.getElementById('totalReferrals').textContent = userData.directReferrals;
+                document.getElementById('teamIncome').textContent = web3.utils.fromWei(userData.referralEarnings, 'ether');
+                
+                // Update button states
+                document.getElementById('activateBtn').disabled = userData.isActive;
+                document.getElementById('dailyClaimBtn').disabled = !userData.isActive;
+                
+                if (userData.isActive) {
+                    document.getElementById('activateBtn').innerHTML = '<i class="fas fa-check"></i> Activated';
+                }
+            }
+        }
 
-        // Show Toast
+        // Loading functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // Toast function
         function showToast(title, message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastTitle = document.getElementById('toastTitle');
@@ -937,25 +964,6 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 5000);
-        }
-
-        // Check Registration - आपका contract call
-        function checkRegistration() {
-            // यहाँ contract se check karna hoga
-            return userData.isRegistered;
-        }
-
-        // MetaMask events
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', function(accounts) {
-                if (accounts.length === 0) {
-                    userAccount = null;
-                    document.getElementById('walletAddress').innerHTML = '<i class="fas fa-wallet"></i> कनेक्ट नहीं है';
-                } else {
-                    userAccount = accounts[0];
-                    handleWalletConnected();
-                }
-            });
         }
     </script>
 </body>
