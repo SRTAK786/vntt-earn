@@ -102,16 +102,6 @@
                         <span class="stat-label">Virtual Balance</span>
                         <span id="virtualBalance" class="stat-value">0 VNTT</span>
                     </div>
-                    <div class="referral-link-section">
-                        <h3><i class="fas fa-link"></i> Your Referral Link</h3>
-                        <div class="link-box">
-                            <input type="text" id="referralLink" readonly placeholder="Connect wallet to see referral link">
-                            <button id="copyLinkBtn" onclick="copyReferralLink()">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
-                        <p class="link-info"><i class="fas fa-info-circle"></i> Share this link with friends to earn 10-level referral rewards!</p>
-                    </div>
                     <div class="stat-card premium">
                         <i class="fas fa-calendar-check"></i>
                         <span class="stat-label">Daily Reward</span>
@@ -130,6 +120,22 @@
                         <span class="stat-label">Referral Earnings</span>
                         <span id="referralEarnings" class="stat-value">0 VNTT</span>
                     </div>
+                </div>
+                <div class="referral-link-section">
+                    <div class="card-header">
+                        <i class="fas fa-link"></i>
+                        <h3>Your Referral Link</h3>
+                    </div>
+                    <div class="link-box">
+                        <input type="text" id="referralLink" readonly placeholder="Connect wallet to see referral link">
+                        <button id="copyLinkBtn" class="copy-btn" onclick="copyReferralLink()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <p class="link-info">
+                        <i class="fas fa-info-circle"></i>
+                        Share this link with friends to earn 10-level referral rewards!
+                    </p>
                 </div>
 
                 <!-- Withdrawal Section (after project end) -->
