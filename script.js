@@ -153,8 +153,25 @@ async function updateUserData() {
         document.getElementById('virtualBalance').textContent = 
             `${web3.utils.fromWei(virtualBalance, 'ether')} VNTT`;
         
+        // Inside updateUserData function, find this part:
         const canClaim = await contract.methods.canClaimToday(userAccount).call();
         document.getElementById('claimDailyBtn').disabled = !canClaim;
+
+        // Replace with:
+        const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        console.log('📊 Claim status in updateUserData - canClaim:', canClaim);
+
+        const claimBtn = document.getElementById('claimDailyBtn');
+        claimBtn.disabled = !canClaim;
+
+        // Update button text/color based on status
+        if (canClaim) {
+            claimBtn.style.background = 'linear-gradient(135deg, #00ffff, #ff00ff)';
+            claimBtn.title = 'Click to claim your daily reward';
+        } else {
+            claimBtn.style.background = 'linear-gradient(135deg, #666666, #444444)';
+            claimBtn.title = 'Already claimed today. Come back tomorrow!';
+        }
         
         let totalReferrals = 0;
         for (let i = 0; i < 10; i++) {
@@ -279,6 +296,8 @@ async function activateUser() {
 // ========== CLAIM DAILY REWARD ==========
 async function claimDailyReward() {
     console.log('🚀 Claim button clicked!');
+    console.log('Current userAccount:', userAccount);
+    console.log('Current userData:', userData);
     
     // Check if MetaMask is installed
     if (!window.ethereum) {
@@ -313,40 +332,91 @@ async function claimDailyReward() {
     
     // Disable button and show loading
     claimBtn.disabled = true;
-    claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
+    claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
     
     try {
-        console.log('Claiming daily reward for:', userAccount);
+        // DEBUG: Get all user info from contract
+        console.log('🔍 DEBUG: Getting user info from contract...');
         
-        // First check if can claim
+        // Get full user data
+        const fullUserData = await contract.methods.users(userAccount).call();
+        console.log('🔍 Full user data:', fullUserData);
+        
+        // Get last claim time
+        const lastClaimTime = await contract.methods.getLastClaimTime(userAccount).call();
+        console.log('🔍 Last claim time:', lastClaimTime, new Date(parseInt(lastClaimTime) * 1000));
+        
+        // Get current time
+        const currentTime = Math.floor(Date.now() / 1000);
+        console.log('🔍 Current time:', currentTime, new Date());
+        
+        // Check if can claim
         const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        console.log('🔍 Can claim today?', canClaim);
+        
+        // Get project end time
+        const projectEndTime = await contract.methods.projectEndTime().call();
+        console.log('🔍 Project end time:', projectEndTime, new Date(parseInt(projectEndTime) * 1000));
+        
         if (!canClaim) {
-            showToast('❌ You have already claimed today!', 'error');
+            // Calculate time remaining for next claim
+            if (lastClaimTime > 0) {
+                const nextClaimTime = parseInt(lastClaimTime) + 86400; // 24 hours in seconds
+                const timeRemaining = nextClaimTime - currentTime;
+                
+                if (timeRemaining > 0) {
+                    const hours = Math.floor(timeRemaining / 3600);
+                    const minutes = Math.floor((timeRemaining % 3600) / 60);
+                    showToast(`⏳ Next claim available in ${hours}h ${minutes}m`, 'info');
+                } else {
+                    showToast('❌ Cannot claim at this time', 'error');
+                }
+            } else {
+                showToast('❌ You have already claimed today!', 'error');
+            }
+            
             claimBtn.disabled = false;
             claimBtn.innerHTML = originalText;
             return;
         }
         
+        // Update button text for actual claiming
+        claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
+        
+        console.log('🚀 Attempting to claim daily reward for:', userAccount);
+        
         // Send transaction
         await contract.methods.claimDailyReward()
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
-                console.log('Claim TX:', hash);
-                showToast('⏳ Claiming reward...', 'info');
+                console.log('📝 Claim TX Hash:', hash);
+                showToast('⏳ Claiming reward... Transaction sent!', 'info');
             })
             .on('receipt', (receipt) => {
-                console.log('✅ Claim successful:', receipt);
+                console.log('✅ Claim successful! Receipt:', receipt);
                 showToast('✅ Daily reward claimed successfully!', 'success');
+            })
+            .on('error', (error) => {
+                console.error('❌ Transaction error:', error);
+                throw error;
             });
         
         // Wait a moment for blockchain to update
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         
         // Update user data
         await updateUserData();
         
+        // Check final claim status
+        const finalCanClaim = await contract.methods.canClaimToday(userAccount).call();
+        console.log('🔍 Final claim status - can claim:', finalCanClaim);
+        
+        if (!finalCanClaim) {
+            showToast('✅ Claim successful! Come back tomorrow for next reward.', 'success');
+        }
+        
     } catch (error) {
-        console.error('❌ Claim error:', error);
+        console.error('❌ Claim error details:', error);
         
         // Handle specific errors
         if (error.message.includes('AlreadyClaimed')) {
@@ -356,19 +426,21 @@ async function claimDailyReward() {
         } else if (error.message.includes('NotActivated')) {
             showToast('❌ Your account is not activated!', 'error');
         } else if (error.message.includes('insufficient funds')) {
-            showToast('❌ Insufficient BNB for gas', 'error');
+            showToast('❌ Insufficient BNB for gas fees', 'error');
+        } else if (error.message.includes('ProjectEnded')) {
+            showToast('❌ Project has ended!', 'error');
         } else {
-            showToast('❌ Error: ' + (error.message || 'Unknown error').slice(0, 50), 'error');
+            showToast('❌ Error: ' + (error.message || 'Unknown error').substring(0, 50), 'error');
         }
     } finally {
-        claimBtn.innerHTML = originalText;
-        // Check current claim status
+        // Re-enable button if needed
         try {
-            const canClaimNow = await contract.methods.canClaimToday(userAccount).call();
-            claimBtn.disabled = !canClaimNow;
+            const finalStatus = await contract.methods.canClaimToday(userAccount).call();
+            claimBtn.disabled = !finalStatus;
         } catch {
             claimBtn.disabled = false;
         }
+        claimBtn.innerHTML = originalText;
     }
 }
 
@@ -687,6 +759,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error checking accounts:', error);
             });
     }
+
+    // ========== DEBUG FUNCTION ==========
+async function debugClaimStatus() {
+    console.log('🔧 DEBUG: Checking claim status manually');
+    
+    if (!contract || !userAccount) {
+        console.log('❌ Contract or userAccount not available');
+        return;
+    }
+    
+    try {
+        // Get user data
+        const user = await contract.methods.users(userAccount).call();
+        console.log('📊 User data from contract:', {
+            isActivated: user.isActivated,
+            lastClaimTime: user.lastClaimTime,
+            currentTime: Math.floor(Date.now() / 1000),
+            timeSinceLastClaim: Math.floor(Date.now() / 1000) - parseInt(user.lastClaimTime),
+            canClaim: await contract.methods.canClaimToday(userAccount).call()
+        });
+        
+        // Check if user can claim
+        const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        
+        if (!canClaim && user.lastClaimTime > 0) {
+            const nextClaimTime = parseInt(user.lastClaimTime) + 86400;
+            const currentTime = Math.floor(Date.now() / 1000);
+            const waitTime = nextClaimTime - currentTime;
+            
+            if (waitTime > 0) {
+                const hours = Math.floor(waitTime / 3600);
+                const minutes = Math.floor((waitTime % 3600) / 60);
+                console.log(`⏳ Need to wait ${hours}h ${minutes}m before next claim`);
+                showToast(`⏳ Next claim in ${hours}h ${minutes}m`, 'info');
+            }
+        }
+        
+        // Update button state
+        const claimBtn = document.getElementById('claimDailyBtn');
+        if (claimBtn) {
+            claimBtn.disabled = !canClaim;
+            console.log('🔧 Button state updated - disabled:', claimBtn.disabled);
+        }
+        
+    } catch (error) {
+        console.error('❌ Debug error:', error);
+    }
+}
+
+// Add keyboard shortcut for debug (Press D twice quickly)
+let debugPressCount = 0;
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'd' || e.key === 'D') {
+        debugPressCount++;
+        if (debugPressCount === 2) {
+            debugClaimStatus();
+            debugPressCount = 0;
+        }
+        setTimeout(() => { debugPressCount = 0; }, 500);
+    }
+});
 });
 
 // Make functions available globally
