@@ -232,7 +232,6 @@ async function claimDailyReward() {
     }
 }
 
-// Withdraw
 async function withdraw(feeType) {
     if (!contract || !userAccount) return;
     
@@ -242,19 +241,30 @@ async function withdraw(feeType) {
             const fee = await contract.methods.withdrawalFeeUSDT().call();
             await usdtContract.methods.approve(CONFIG.contractAddress, fee)
                 .send({ from: userAccount });
+            
+            // 1 for USDT
+            await contract.methods.withdraw(1)
+                .send({ from: userAccount })
+                .on('receipt', () => {
+                    showToast('Withdrawal successful!', 'success');
+                    updateUserData();
+                });
+                
         } else if (feeType === 'VNT') {
             const vntContract = new web3.eth.Contract(ERC20_ABI, CONFIG.vntTokenAddress);
             const fee = await contract.methods.withdrawalFeeVNT().call();
             await vntContract.methods.approve(CONFIG.contractAddress, fee)
                 .send({ from: userAccount });
+            
+            // 2 for VNT
+            await contract.methods.withdraw(2)
+                .send({ from: userAccount })
+                .on('receipt', () => {
+                    showToast('Withdrawal successful!', 'success');
+                    updateUserData();
+                });
         }
         
-        await contract.methods.withdraw(feeType)
-            .send({ from: userAccount })
-            .on('receipt', () => {
-                showToast('Withdrawal successful!', 'success');
-                updateUserData();
-            });
     } catch (error) {
         console.error('Withdrawal error:', error);
         showToast(error.message, 'error');
