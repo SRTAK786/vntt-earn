@@ -168,6 +168,34 @@ async function updateUserData() {
             claimBtn.style.background = 'linear-gradient(135deg, #666666, #444444)';
             claimBtn.title = 'Already claimed today. Come back tomorrow!';
         }
+
+        const user = await contract.methods.users(userAccount).call();
+        const lastClaimTimestamp = parseInt(user.lastClaimTime);
+        
+        if (lastClaimTimestamp > 0) {
+            const lastClaimDate = new Date(lastClaimTimestamp * 1000);
+            const now = Math.floor(Date.now() / 1000);
+            const nextClaimTime = lastClaimTimestamp + 86400; // 24 hours later
+            
+            // Format last claim time
+            const lastClaimStr = lastClaimDate.toLocaleTimeString() + ' ' + 
+                                lastClaimDate.toLocaleDateString();
+            document.getElementById('lastClaimTime').textContent = lastClaimStr;
+            
+            // Calculate time until next claim
+            if (now < nextClaimTime) {
+                const waitSeconds = nextClaimTime - now;
+                const hours = Math.floor(waitSeconds / 3600);
+                const minutes = Math.floor((waitSeconds % 3600) / 60);
+                document.getElementById('nextClaimTime').textContent = 
+                    `Next: ${hours}h ${minutes}m`;
+            } else {
+                document.getElementById('nextClaimTime').textContent = 'Ready to claim!';
+            }
+        } else {
+            document.getElementById('lastClaimTime').textContent = 'Never claimed';
+            document.getElementById('nextClaimTime').textContent = 'Claim now!';
+        }
         
         let totalReferrals = 0;
         for (let i = 0; i < 10; i++) {
