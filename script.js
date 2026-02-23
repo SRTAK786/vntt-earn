@@ -105,7 +105,15 @@ async function checkUserStatus() {
             console.log('User activated - showing dashboard');
             document.getElementById('activationCard').classList.add('hidden');
             document.getElementById('userDashboard').classList.remove('hidden');
-            document.getElementById('claimDailyBtn').style.display = 'block'; // Show claim button
+            
+            // ✅ FIX: Daily claim button ko visible करें
+            const claimBtn = document.getElementById('claimDailyBtn');
+            if (claimBtn) {
+                claimBtn.style.display = 'block';
+                claimBtn.disabled = false;
+                console.log('✅ Claim button enabled');
+            }
+            
             await updateUserData();
             await checkProjectEnded();
         } else {
@@ -245,28 +253,63 @@ async function activateUser() {
 
 // ========== CLAIM DAILY REWARD ==========
 async function claimDailyReward() {
-    if (!contract || !userAccount) return;
+    console.log('🚀 Claim button clicked!');
+    
+    if (!contract) {
+        showToast('❌ Contract not initialized', 'error');
+        return;
+    }
+    
+    if (!userAccount) {
+        showToast('❌ Please connect wallet first', 'error');
+        return;
+    }
     
     const claimBtn = document.getElementById('claimDailyBtn');
     const originalText = claimBtn.innerHTML;
+    
+    // Disable button and show loading
     claimBtn.disabled = true;
     claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
     
     try {
+        console.log('Claiming daily reward for:', userAccount);
+        
         await contract.methods.claimDailyReward()
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
+                console.log('Claim TX:', hash);
                 showToast('⏳ Claiming reward...', 'info');
+            })
+            .on('receipt', (receipt) => {
+                console.log('✅ Claim successful:', receipt);
+                showToast('✅ Daily reward claimed!', 'success');
             });
         
-        showToast('✅ Daily reward claimed!', 'success');
+        // Update user data
         await updateUserData();
         
+        // Check if can claim again tomorrow
+        const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        claimBtn.disabled = !canClaim;
+        
     } catch (error) {
-        console.error('Error:', error);
-        showToast('❌ Error claiming reward', 'error');
+        console.error('❌ Claim error:', error);
+        
+        if (error.message.includes('AlreadyClaimed')) {
+            showToast('❌ Already claimed today!', 'error');
+        } else if (error.message.includes('user rejected')) {
+            showToast('❌ Transaction rejected', 'error');
+        } else if (error.message.includes('NotActivated')) {
+            showToast('❌ Account not activated!', 'error');
+        } else {
+            showToast('❌ Error: ' + error.message.slice(0, 50), 'error');
+        }
+        
+        // Re-enable button if error
+        const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        claimBtn.disabled = !canClaim;
     } finally {
-        claimBtn.disabled = false;
         claimBtn.innerHTML = originalText;
     }
 }
@@ -337,29 +380,54 @@ function copyReferralLink() {
 
 // ========== GET REFERRER FROM URL ==========
 function getReferrerFromUrl() {
-    console.log('Checking URL for referrer...');
+    console.log('🔍 Checking URL for referrer...');
+    
+    // Wait for web3 to be ready
+    if (!window.web3 || !window.web3.utils) {
+        console.log('⏳ Web3 not ready, waiting...');
+        setTimeout(getReferrerFromUrl, 500);
+        return;
+    }
+    
     const urlParams = new URLSearchParams(window.location.search);
     const referrer = urlParams.get('ref');
     
-    console.log('Referrer from URL:', referrer);
+    console.log('📌 Referrer from URL:', referrer);
     
-    if (referrer && window.web3 && window.web3.utils && window.web3.utils.isAddress(referrer)) {
-        const referrerInput = document.getElementById('referrerAddress');
-        if (referrerInput) {
-            referrerInput.value = referrer;
-            referrerInput.style.border = '2px solid #00ff00';
-            showToast('✨ Referrer address auto-filled!', 'info');
+    if (referrer) {
+        // Validate address
+        if (window.web3.utils.isAddress(referrer)) {
+            console.log('✅ Valid address found:', referrer);
             
-            // Enable activate button
-            const activateBtn = document.getElementById('activateBtn');
-            if (activateBtn && userAccount) {
-                activateBtn.disabled = false;
+            const referrerInput = document.getElementById('referrerAddress');
+            if (referrerInput) {
+                referrerInput.value = referrer;
+                referrerInput.style.border = '2px solid #00ff00';
+                referrerInput.style.boxShadow = '0 0 15px #00ff00';
+                
+                showToast('✨ Referrer address auto-filled!', 'success');
+                
+                // Enable activate button if wallet is connected
+                if (userAccount) {
+                    const activateBtn = document.getElementById('activateBtn');
+                    if (activateBtn) {
+                        activateBtn.disabled = false;
+                    }
+                }
+                
+                // Remove highlight after 3 seconds
+                setTimeout(() => {
+                    referrerInput.style.border = '';
+                    referrerInput.style.boxShadow = '';
+                }, 3000);
+            } else {
+                console.log('❌ Referrer input not found');
             }
-            
-            setTimeout(() => {
-                referrerInput.style.border = '';
-            }, 3000);
+        } else {
+            console.log('❌ Invalid address format:', referrer);
         }
+    } else {
+        console.log('📭 No referrer in URL');
     }
 }
 
