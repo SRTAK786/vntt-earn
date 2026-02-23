@@ -31,25 +31,27 @@ async function initWeb3() {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             const accounts = await web3.eth.getAccounts();
             userAccount = accounts[0];
+            console.log('Connected account:', userAccount);
             
-            // Initialize contract
             contract = new web3.eth.Contract(CONTRACT_ABI, CONFIG.contractAddress);
             
-            // Update UI
             updateWalletUI();
             await checkUserStatus();
             startDataRefresh();
             
-            // Listen for account changes
             window.ethereum.on('accountsChanged', handleAccountsChanged);
             window.ethereum.on('chainChanged', () => window.location.reload());
             
         } catch (error) {
             showToast('Error connecting to wallet', 'error');
             console.error(error);
+            document.getElementById('activationCard').classList.remove('hidden');
+            document.getElementById('userDashboard').classList.add('hidden');
         }
     } else {
         showToast('Please install MetaMask!', 'error');
+        document.getElementById('activationCard').classList.remove('hidden');
+        document.getElementById('userDashboard').classList.add('hidden');
     }
 }
 
@@ -68,29 +70,35 @@ function updateWalletUI() {
 
 // Check User Status
 async function checkUserStatus() {
-    if (!contract || !userAccount) return;
+    if (!contract || !userAccount) {
+        console.log('No wallet/contract - showing activation card');
+        document.getElementById('activationCard').classList.remove('hidden');
+        document.getElementById('userDashboard').classList.add('hidden');
+        return;
+    }
     
     try {
-        // Check if user is activated
+        console.log('Checking user status...');
         const user = await contract.methods.users(userAccount).call();
+        console.log('User activated status:', user.isActivated);
+        
         userData.isActivated = user.isActivated;
         
         if (userData.isActivated) {
-            // Show user dashboard, hide activation card
+            console.log('User activated - showing dashboard');
             document.getElementById('activationCard').classList.add('hidden');
             document.getElementById('userDashboard').classList.remove('hidden');
-            
-            // Update user data
             await updateUserData();
-            
-            // Check if project ended
             await checkProjectEnded();
         } else {
+            console.log('User NOT activated - showing activation card');
             document.getElementById('activationCard').classList.remove('hidden');
             document.getElementById('userDashboard').classList.add('hidden');
         }
     } catch (error) {
         console.error('Error checking user status:', error);
+        document.getElementById('activationCard').classList.remove('hidden');
+        document.getElementById('userDashboard').classList.add('hidden');
     }
 }
 
@@ -372,11 +380,13 @@ function getReferrerFromUrl() {
 function handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
         userAccount = null;
+        document.getElementById('activationCard').classList.remove('hidden');
+        document.getElementById('userDashboard').classList.add('hidden');
     } else {
         userAccount = accounts[0];
+        checkUserStatus();
     }
     updateWalletUI();
-    checkUserStatus();
 }
 
 // Start Data Refresh
