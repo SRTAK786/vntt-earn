@@ -563,6 +563,131 @@ body {
     display: none !important;
 }
 
+.referral-link-section {
+    background: linear-gradient(135deg, rgba(0,255,255,0.15), rgba(255,0,255,0.15));
+    backdrop-filter: blur(10px);
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, var(--primary), var(--secondary));
+    border-image-slice: 1;
+    border-radius: 30px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.referral-link-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 255, 255, 0.4);
+}
+
+.referral-link-section h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(45deg, var(--diamond), white);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.referral-link-section h3 i {
+    font-size: 2rem;
+    color: var(--primary);
+    -webkit-text-fill-color: initial;
+}
+
+.link-box {
+    display: flex;
+    gap: 15px;
+    margin: 1.5rem 0;
+}
+
+.link-box input {
+    flex: 1;
+    padding: 1.2rem 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--glass-border);
+    border-radius: 15px;
+    color: var(--diamond);
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.link-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.link-box button {
+    padding: 1.2rem 2.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.link-box button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+.link-box button i {
+    font-size: 1.2rem;
+}
+
+.link-info {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary);
+}
+
+.link-info i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    .referral-link-section {
+        padding: 1.5rem;
+    }
+    
+    .link-box {
+        flex-direction: column;
+    }
+    
+    .link-box button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .referral-link-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .glowing-text {
