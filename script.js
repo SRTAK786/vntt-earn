@@ -1,41 +1,16 @@
 // Configuration
 const CONFIG = {
-    contractAddress: "YOUR_CONTRACT_ADDRESS_HERE",
-    vnttTokenAddress: "YOUR_VNTT_TOKEN_ADDRESS",
-    usdtTokenAddress: "YOUR_USDT_TOKEN_ADDRESS",
-    vntTokenAddress: "YOUR_VNT_TOKEN_ADDRESS",
-    feeWallet: "YOUR_FEE_WALLET_ADDRESS",
+    contractAddress: "0x482134487d6b69F44BADD92CB6a1103c260FA55b",
+    vnttTokenAddress: "0x6033849Dc89eC1DB364EFcd8A6cf9Bc095cD3e41",
+    usdtTokenAddress: "0x55d398326f99059fF775485246999027B3197955",
+    vntTokenAddress: "0xD379Fd70C5C334bb31208122A6781ADB032D176f",
+    feeWallet: "0x0142f7473B3dce0A5154A2DA5D076D865c1560d7",
     networkId: 56, // BSC Mainnet: 56, Testnet: 97
     rpcUrl: "https://bsc-dataseed.binance.org/" // BSC RPC
 };
 
 // Contract ABI (simplified - include full ABI from compiled contract)
-const CONTRACT_ABI = [
-    // Include all functions from the smart contract
-    // This is a minimal ABI - replace with full ABI from compilation
-    {
-        "inputs": [{"name": "_referrer", "type": "address"}],
-        "name": "activate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "claimDailyReward",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{"name": "_feeType", "type": "string"}],
-        "name": "withdraw",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-    // Add all other functions...
-];
+const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_vnttToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_vntToken","type":"address"},{"internalType":"address","name":"_feeWallet","type":"address"},{"internalType":"uint96","name":"_activationFee","type":"uint96"},{"internalType":"uint96","name":"_withdrawalFeeUSDT","type":"uint96"},{"internalType":"uint96","name":"_withdrawalFeeVNT","type":"uint96"},{"internalType":"uint32","name":"_durationDays","type":"uint32"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"AlreadyClaimed","type":"error"},{"inputs":[],"name":"AlreadyRegistered","type":"error"},{"inputs":[],"name":"AlreadyWithdrawn","type":"error"},{"inputs":[],"name":"Blacklisted","type":"error"},{"inputs":[],"name":"InsufficientAllowance","type":"error"},{"inputs":[],"name":"InsufficientBalance","type":"error"},{"inputs":[],"name":"InvalidAddress","type":"error"},{"inputs":[],"name":"InvalidFeeType","type":"error"},{"inputs":[],"name":"InvalidReferrer","type":"error"},{"inputs":[],"name":"LevelOutOfBounds","type":"error"},{"inputs":[],"name":"NoBalance","type":"error"},{"inputs":[],"name":"NotActivated","type":"error"},{"inputs":[],"name":"ProjectEnded","type":"error"},{"inputs":[],"name":"ProjectNotEnded","type":"error"},{"inputs":[],"name":"ReferrerNotActivated","type":"error"},{"inputs":[],"name":"RewardTooLarge","type":"error"},{"inputs":[],"name":"SelfReferral","type":"error"},{"inputs":[],"name":"TransferFailed","type":"error"},{"inputs":[],"name":"Unauthorized","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"status","type":"bool"}],"name":"BlacklistUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"DailyRewardClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint96","name":"newActivationFee","type":"uint96"},{"indexed":false,"internalType":"uint96","name":"newWithdrawalFeeUSDT","type":"uint96"},{"indexed":false,"internalType":"uint96","name":"newWithdrawalFeeVNT","type":"uint96"}],"name":"FeesUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"key","type":"string"},{"indexed":false,"internalType":"string","name":"value","type":"string"},{"indexed":true,"internalType":"uint256","name":"dataId","type":"uint256"}],"name":"ManualDataStored","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newEndTime","type":"uint256"}],"name":"ProjectDurationUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"endTime","type":"uint256"}],"name":"ProjectEndedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralReward","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"UserActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint8","name":"feeType","type":"uint8"}],"name":"Withdrawal","type":"event"},{"stateMutability":"payable","type":"fallback"},{"inputs":[{"internalType":"address","name":"_referrer","type":"address"}],"name":"activate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"activationFee","outputs":[{"internalType":"uint96","name":"","type":"uint96"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"blacklisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"canClaimToday","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimDailyReward","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"endProject","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"feeWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getActivationTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getLastClaimTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_dataId","type":"uint256"}],"name":"getManualData","outputs":[{"internalType":"string","name":"","type":"string"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"uint256","name":"_level","type":"uint256"}],"name":"getReferralCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTimeRemaining","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTotalReferralEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserRealBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserReferrer","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserVirtualBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"isUserActivated","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"manualData","outputs":[{"internalType":"string","name":"key","type":"string"},{"internalType":"string","name":"value","type":"string"},{"internalType":"uint40","name":"timestamp","type":"uint40"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"manualDataCount","outputs":[{"internalType":"uint32","name":"","type":"uint32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ownerAutoActivated","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectEndTime","outputs":[{"internalType":"uint128","name":"","type":"uint128"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"projectStartTime","outputs":[{"internalType":"uint128","name":"","type":"uint128"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"registeredUsers","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_key","type":"string"},{"internalType":"string","name":"_value","type":"string"}],"name":"storeManualData","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"},{"internalType":"bool","name":"_status","type":"bool"}],"name":"updateBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newFeeWallet","type":"address"}],"name":"updateFeeWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint96","name":"_newActivationFee","type":"uint96"},{"internalType":"uint96","name":"_newWithdrawalFeeUSDT","type":"uint96"},{"internalType":"uint96","name":"_newWithdrawalFeeVNT","type":"uint96"}],"name":"updateFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint128","name":"_newEndTime","type":"uint128"}],"name":"updateProjectDuration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256[10]","name":"_newRewards","type":"uint256[10]"}],"name":"updateReferralRewards","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"uint96","name":"virtualBalance","type":"uint96"},{"internalType":"uint96","name":"realBalance","type":"uint96"},{"internalType":"uint96","name":"totalReferralEarnings","type":"uint96"},{"internalType":"uint32","name":"activationTime","type":"uint32"},{"internalType":"uint32","name":"lastClaimTime","type":"uint32"},{"internalType":"address","name":"referrer","type":"address"},{"internalType":"bool","name":"isActivated","type":"bool"},{"internalType":"bool","name":"hasWithdrawn","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vntToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vnttToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"_feeType","type":"uint8"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawalFeeUSDT","outputs":[{"internalType":"uint96","name":"","type":"uint96"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdrawalFeeVNT","outputs":[{"internalType":"uint96","name":"","type":"uint96"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
 // State variables
 let web3;
@@ -139,9 +114,6 @@ async function updateUserData() {
             const count = await contract.methods.getReferralCount(userAccount, i).call();
             document.getElementById(`level${i+1}Count`).textContent = count;
             totalReferrals += parseInt(count);
-            
-            // Get referral earnings for each level (you'll need to calculate this)
-            // This is simplified - you might want to track earnings per level separately
         }
         
         document.getElementById('totalReferrals').textContent = totalReferrals;
@@ -150,6 +122,9 @@ async function updateUserData() {
         const referralEarnings = await contract.methods.getTotalReferralEarnings(userAccount).call();
         document.getElementById('referralEarnings').textContent = 
             `${web3.utils.fromWei(referralEarnings, 'ether')} VNTT`;
+        
+        // ✅ NEW LINE: Update referral link when user data updates
+        updateReferralLink();
         
     } catch (error) {
         console.error('Error updating user data:', error);
@@ -271,28 +246,18 @@ async function withdraw(feeType) {
     }
 }
 
-// Show Level Details
 async function showLevelDetails(level) {
     if (!contract || !userAccount) return;
     
     const modal = document.getElementById('levelModal');
     document.getElementById('modalLevelTitle').querySelector('span').textContent = level;
     
-    // Get referral addresses for this level
-    const addresses = await contract.methods.getReferralAddresses(userAccount, level - 1).call();
+    // Sirf count दिखाएं, addresses नहीं
+    const count = await contract.methods.getReferralCount(userAccount, level - 1).call();
     
     const membersList = document.getElementById('levelMembersList');
-    membersList.innerHTML = '';
-    
-    addresses.forEach((addr, index) => {
-        const memberDiv = document.createElement('div');
-        memberDiv.className = 'member-item';
-        memberDiv.innerHTML = `
-            <span>${index + 1}. ${addr.slice(0, 6)}...${addr.slice(-4)}</span>
-            <span class="member-reward">+10 VNTT</span>
-        `;
-        membersList.appendChild(memberDiv);
-    });
+    membersList.innerHTML = `<p class="info-message">Total <strong>${count}</strong> members in Level ${level}</p>
+                             <p class="note-message">Address list coming soon!</p>`;
     
     modal.style.display = 'flex';
 }
@@ -336,6 +301,73 @@ function showToast(message, type = 'info') {
     }, 5000);
 }
 
+function updateReferralLink() {
+    if (!userAccount) {
+        const linkInput = document.getElementById('referralLink');
+        if (linkInput) {
+            linkInput.value = 'Connect wallet to see referral link';
+        }
+        return;
+    }
+    
+    const baseUrl = window.location.origin + window.location.pathname;
+    // Clean URL - remove existing query params
+    const cleanUrl = baseUrl.split('?')[0];
+    const referralLink = `${cleanUrl}?ref=${userAccount}`;
+    
+    const linkInput = document.getElementById('referralLink');
+    if (linkInput) {
+        linkInput.value = referralLink;
+    }
+}
+
+// Copy Referral Link
+function copyReferralLink() {
+    const linkInput = document.getElementById('referralLink');
+    if (!linkInput || !linkInput.value || linkInput.value.includes('Connect wallet')) {
+        showToast('No referral link available', 'error');
+        return;
+    }
+    
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999); // For mobile
+    
+    try {
+        // Modern way
+        navigator.clipboard.writeText(linkInput.value).then(() => {
+            showToast('✅ Referral link copied! Share with friends', 'success');
+        }).catch(() => {
+            // Fallback
+            document.execCommand('copy');
+            showToast('✅ Referral link copied! Share with friends', 'success');
+        });
+    } catch (err) {
+        // Fallback for older browsers
+        document.execCommand('copy');
+        showToast('✅ Referral link copied! Share with friends', 'success');
+    }
+}
+
+// Auto-fill referrer from URL
+function getReferrerFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const referrer = urlParams.get('ref');
+    
+    if (referrer && window.web3 && window.web3.utils && window.web3.utils.isAddress(referrer)) {
+        const referrerInput = document.getElementById('referrerAddress');
+        if (referrerInput) {
+            referrerInput.value = referrer;
+            referrerInput.style.border = '2px solid #00ff00';
+            showToast('✨ Referrer address auto-filled!', 'info');
+            
+            // Remove highlight after 3 seconds
+            setTimeout(() => {
+                referrerInput.style.border = '';
+            }, 3000);
+        }
+    }
+}
+
 // Handle Account Change
 function handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
@@ -358,22 +390,50 @@ function startDataRefresh() {
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     // Connect Wallet
-    document.getElementById('connectWallet').addEventListener('click', initWeb3);
+    const connectBtn = document.getElementById('connectWallet');
+    if (connectBtn) {
+        connectBtn.addEventListener('click', initWeb3);
+    }
     
     // Activate
-    document.getElementById('activateBtn').addEventListener('click', activateUser);
+    const activateBtn = document.getElementById('activateBtn');
+    if (activateBtn) {
+        activateBtn.addEventListener('click', activateUser);
+    }
     
     // Claim Daily
-    document.getElementById('claimDailyBtn').addEventListener('click', claimDailyReward);
+    const claimBtn = document.getElementById('claimDailyBtn');
+    if (claimBtn) {
+        claimBtn.addEventListener('click', claimDailyReward);
+    }
     
     // Withdraw Buttons
-    document.getElementById('withdrawUSDTBtn').addEventListener('click', () => withdraw('USDT'));
-    document.getElementById('withdrawVNTBtn').addEventListener('click', () => withdraw('VNT'));
+    const withdrawUSDTBtn = document.getElementById('withdrawUSDTBtn');
+    if (withdrawUSDTBtn) {
+        withdrawUSDTBtn.addEventListener('click', () => withdraw('USDT'));
+    }
+    
+    const withdrawVNTBtn = document.getElementById('withdrawVNTBtn');
+    if (withdrawVNTBtn) {
+        withdrawVNTBtn.addEventListener('click', () => withdraw('VNT'));
+    }
     
     // Modal Close
-    document.querySelector('.close-modal').addEventListener('click', () => {
-        document.getElementById('levelModal').style.display = 'none';
-    });
+    const closeModal = document.querySelector('.close-modal');
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            const modal = document.getElementById('levelModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+    
+    // Copy button event listener
+    const copyBtn = document.getElementById('copyLinkBtn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyReferralLink);
+    }
     
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
@@ -383,7 +443,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (accounts.length > 0) {
                     initWeb3();
                 }
+                // Get referrer from URL even if not connected
+                if (typeof getReferrerFromUrl === 'function') {
+                    getReferrerFromUrl();
+                }
+            })
+            .catch(error => {
+                console.error('Error checking accounts:', error);
+                if (typeof getReferrerFromUrl === 'function') {
+                    getReferrerFromUrl();
+                }
             });
+    } else {
+        // Try to get referrer from URL anyway
+        if (typeof getReferrerFromUrl === 'function') {
+            getReferrerFromUrl();
+        }
     }
 });
 
