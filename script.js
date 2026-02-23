@@ -505,50 +505,59 @@ function startDataRefresh() {
 
 // ========== EVENT LISTENERS ==========
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded - setting up event listeners...');
+    console.log('📱 DOM loaded - setting up event listeners...');
     
     // Connect Wallet
     const connectBtn = document.getElementById('connectWallet');
-    if (connectBtn) connectBtn.addEventListener('click', initWeb3);
+    if (connectBtn) {
+        connectBtn.addEventListener('click', initWeb3);
+        console.log('✅ Connect wallet listener added');
+    }
     
     // Activate button
     const activateBtn = document.getElementById('activateBtn');
     const referrerInput = document.getElementById('referrerAddress');
     
     if (activateBtn && referrerInput) {
-        // Remove any existing listeners and add new ones
-        activateBtn.replaceWith(activateBtn.cloneNode(true));
-        referrerInput.replaceWith(referrerInput.cloneNode(true));
-        
-        // Get fresh references
-        const newActivateBtn = document.getElementById('activateBtn');
-        const newReferrerInput = document.getElementById('referrerAddress');
-        
         // Input listener
-        newReferrerInput.addEventListener('input', function() {
-            if (web3 && web3.utils && web3.utils.isAddress(this.value) && userAccount) {
-                newActivateBtn.disabled = false;
+        referrerInput.addEventListener('input', function() {
+            if (window.web3 && window.web3.utils && window.web3.utils.isAddress(this.value) && userAccount) {
+                activateBtn.disabled = false;
                 console.log('✅ Activate button enabled');
             } else {
-                newActivateBtn.disabled = true;
+                activateBtn.disabled = true;
                 console.log('❌ Activate button disabled');
             }
         });
         
         // Click listener
-        newActivateBtn.addEventListener('click', activateUser);
+        activateBtn.addEventListener('click', activateUser);
+        console.log('✅ Activate button listener added');
     }
     
-    // Claim Daily
+    // Claim Daily button - FIXED VERSION
     const claimBtn = document.getElementById('claimDailyBtn');
-    if (claimBtn) claimBtn.addEventListener('click', claimDailyReward);
+    if (claimBtn) {
+        // Remove old listener and add new one
+        claimBtn.removeEventListener('click', claimDailyReward);
+        claimBtn.addEventListener('click', claimDailyReward);
+        console.log('✅ Claim button listener added');
+    } else {
+        console.log('❌ Claim button not found');
+    }
     
     // Withdraw Buttons
     const withdrawUSDTBtn = document.getElementById('withdrawUSDTBtn');
-    if (withdrawUSDTBtn) withdrawUSDTBtn.addEventListener('click', () => withdraw('USDT'));
+    if (withdrawUSDTBtn) {
+        withdrawUSDTBtn.addEventListener('click', () => withdraw('USDT'));
+        console.log('✅ Withdraw USDT listener added');
+    }
     
     const withdrawVNTBtn = document.getElementById('withdrawVNTBtn');
-    if (withdrawVNTBtn) withdrawVNTBtn.addEventListener('click', () => withdraw('VNT'));
+    if (withdrawVNTBtn) {
+        withdrawVNTBtn.addEventListener('click', () => withdraw('VNT'));
+        console.log('✅ Withdraw VNT listener added');
+    }
     
     // Modal Close
     const closeModal = document.querySelector('.close-modal');
@@ -560,21 +569,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Copy button
     const copyBtn = document.getElementById('copyLinkBtn');
-    if (copyBtn) copyBtn.addEventListener('click', copyReferralLink);
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyReferralLink);
+        console.log('✅ Copy button listener added');
+    }
     
-    // Check for referrer in URL (with delay to ensure web3 is loaded)
+    // Check for referrer in URL (with delay to ensure DOM is ready)
     setTimeout(() => {
-        getReferrerFromUrl();
-    }, 1000);
+        console.log('🔍 Checking URL for referrer...');
+        if (typeof getReferrerFromUrl === 'function') {
+            getReferrerFromUrl();
+        }
+    }, 1500);
     
     // Auto-connect if previously connected
     if (typeof window.ethereum !== 'undefined') {
         window.ethereum.request({ method: 'eth_accounts' })
             .then(accounts => {
                 if (accounts.length > 0) {
+                    console.log('🔄 Auto-connecting...');
                     initWeb3();
                 }
             })
-            .catch(console.error);
+            .catch(error => {
+                console.error('Error checking accounts:', error);
+            });
     }
 });
