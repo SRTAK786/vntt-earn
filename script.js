@@ -405,9 +405,23 @@ document.addEventListener('DOMContentLoaded', () => {
         connectBtn.addEventListener('click', initWeb3);
     }
     
-    // Activate
+    // Activate button - with fix for disabled state
     const activateBtn = document.getElementById('activateBtn');
-    if (activateBtn) {
+    const referrerInput = document.getElementById('referrerAddress');
+    
+    if (activateBtn && referrerInput) {
+        // Enable/disable based on input
+        referrerInput.addEventListener('input', function() {
+            if (this.value.length >= 42 && userAccount) { // 42 is length of address with 0x
+                activateBtn.disabled = false;
+                console.log('✅ Activate button enabled');
+            } else {
+                activateBtn.disabled = true;
+                console.log('❌ Activate button disabled');
+            }
+        });
+        
+        // Also check on click of activate button (bypass disabled if needed)
         activateBtn.addEventListener('click', activateUser);
     }
     
@@ -447,13 +461,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
-        // Auto-connect if previously connected
         window.ethereum.request({ method: 'eth_accounts' })
             .then(accounts => {
                 if (accounts.length > 0) {
                     initWeb3();
                 }
-                // Get referrer from URL even if not connected
                 if (typeof getReferrerFromUrl === 'function') {
                     getReferrerFromUrl();
                 }
@@ -465,13 +477,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
     } else {
-        // Try to get referrer from URL anyway
         if (typeof getReferrerFromUrl === 'function') {
             getReferrerFromUrl();
         }
     }
 });
-
 // ERC20 ABI (minimal for approve)
 const ERC20_ABI = [
     {
