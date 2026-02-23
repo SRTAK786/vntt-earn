@@ -56,6 +56,12 @@ async function initWeb3() {
             await checkUserStatus();
             startDataRefresh();
             
+            // Check for referrer in URL after Web3 is initialized
+            setTimeout(() => {
+                console.log('🔍 Checking URL for referrer after Web3 init...');
+                getReferrerFromUrl();
+            }, 1000);
+            
             window.ethereum.on('accountsChanged', handleAccountsChanged);
             window.ethereum.on('chainChanged', () => window.location.reload());
             
@@ -255,13 +261,25 @@ async function activateUser() {
 async function claimDailyReward() {
     console.log('🚀 Claim button clicked!');
     
+    // Check if web3 is initialized
+    if (!window.web3 || !window.ethereum) {
+        showToast('❌ Please install MetaMask first!', 'error');
+        return;
+    }
+    
     if (!contract) {
-        showToast('❌ Contract not initialized', 'error');
+        showToast('❌ Contract not initialized. Please connect wallet first.', 'error');
         return;
     }
     
     if (!userAccount) {
         showToast('❌ Please connect wallet first', 'error');
+        return;
+    }
+    
+    // Check if user is activated
+    if (!userData.isActivated) {
+        showToast('❌ Please activate your account first', 'error');
         return;
     }
     
@@ -275,40 +293,64 @@ async function claimDailyReward() {
     try {
         console.log('Claiming daily reward for:', userAccount);
         
+        // First check if can claim
+        const canClaim = await contract.methods.canClaimToday(userAccount).call();
+        if (!canClaim) {
+            showToast('❌ You have already claimed today!', 'error');
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = originalText;
+            return;
+        }
+        
+        // Send transaction
         await contract.methods.claimDailyReward()
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
                 console.log('Claim TX:', hash);
-                showToast('⏳ Claiming reward...', 'info');
+                showToast('⏳ Claiming reward... Transaction: ' + hash.slice(0, 10) + '...', 'info');
             })
             .on('receipt', (receipt) => {
                 console.log('✅ Claim successful:', receipt);
-                showToast('✅ Daily reward claimed!', 'success');
+                showToast('✅ Daily reward claimed successfully!', 'success');
+            })
+            .on('error', (error) => {
+                console.error('Transaction error:', error);
+                throw error;
             });
+        
+        // Wait a moment for blockchain to update
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Update user data
         await updateUserData();
         
-        // Check if can claim again tomorrow
-        const canClaim = await contract.methods.canClaimToday(userAccount).call();
-        claimBtn.disabled = !canClaim;
+        // Check if can claim again
+        const canClaimNow = await contract.methods.canClaimToday(userAccount).call();
+        claimBtn.disabled = !canClaimNow;
         
     } catch (error) {
         console.error('❌ Claim error:', error);
         
+        // Handle specific errors
         if (error.message.includes('AlreadyClaimed')) {
-            showToast('❌ Already claimed today!', 'error');
+            showToast('❌ You have already claimed today!', 'error');
         } else if (error.message.includes('user rejected')) {
-            showToast('❌ Transaction rejected', 'error');
+            showToast('❌ Transaction was rejected', 'error');
         } else if (error.message.includes('NotActivated')) {
-            showToast('❌ Account not activated!', 'error');
+            showToast('❌ Your account is not activated!', 'error');
+        } else if (error.message.includes('insufficient funds')) {
+            showToast('❌ Insufficient BNB for gas', 'error');
         } else {
-            showToast('❌ Error: ' + error.message.slice(0, 50), 'error');
+            showToast('❌ Error: ' + (error.message || 'Unknown error').slice(0, 50), 'error');
         }
         
-        // Re-enable button if error
-        const canClaim = await contract.methods.canClaimToday(userAccount).call();
-        claimBtn.disabled = !canClaim;
+        // Check current claim status
+        try {
+            const canClaimNow = await contract.methods.canClaimToday(userAccount).call();
+            claimBtn.disabled = !canClaimNow;
+        } catch {
+            claimBtn.disabled = false;
+        }
     } finally {
         claimBtn.innerHTML = originalText;
     }
@@ -382,53 +424,97 @@ function copyReferralLink() {
 function getReferrerFromUrl() {
     console.log('🔍 Checking URL for referrer...');
     
-    // Wait for web3 to be ready
-    if (!window.web3 || !window.web3.utils) {
-        console.log('⏳ Web3 not ready, waiting...');
-        setTimeout(getReferrerFromUrl, 500);
+    try {
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrer = urlParams.get('ref');
+        
+        console.log('📌 Raw referrer from URL:', referrer);
+        
+        if (!referrer) {
+            console.log('📭 No referrer in URL');
+            return;
+        }
+        
+        // Check if web3 is available
+        if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
+            // Validate address
+            if (window.web3.utils.isAddress(referrer)) {
+                console.log('✅ Valid address found:', referrer);
+                fillReferrerAddress(referrer);
+            } else {
+                console.log('❌ Invalid address format:', referrer);
+                showToast('⚠️ Invalid referral address in URL', 'error');
+            }
+        } else {
+            console.log('⏳ Web3 not ready, waiting...');
+            // Try again after Web3 is loaded
+            const checkWeb3Interval = setInterval(() => {
+                if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
+                    clearInterval(checkWeb3Interval);
+                    if (window.web3.utils.isAddress(referrer)) {
+                        console.log('✅ Web3 loaded, valid address found:', referrer);
+                        fillReferrerAddress(referrer);
+                    }
+                }
+            }, 500);
+            
+            // Stop checking after 10 seconds
+            setTimeout(() => clearInterval(checkWeb3Interval), 10000);
+        }
+    } catch (error) {
+        console.error('Error in getReferrerFromUrl:', error);
+    }
+}
+
+// Helper function to fill referrer address
+function fillReferrerAddress(referrer) {
+    const referrerInput = document.getElementById('referrerAddress');
+    if (!referrerInput) {
+        console.log('❌ Referrer input not found');
         return;
     }
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const referrer = urlParams.get('ref');
+    // Set the value
+    referrerInput.value = referrer;
     
-    console.log('📌 Referrer from URL:', referrer);
+    // Highlight the input
+    referrerInput.style.border = '2px solid #00ff00';
+    referrerInput.style.boxShadow = '0 0 20px #00ff00';
+    referrerInput.style.transition = 'all 0.3s ease';
     
-    if (referrer) {
-        // Validate address
-        if (window.web3.utils.isAddress(referrer)) {
-            console.log('✅ Valid address found:', referrer);
-            
-            const referrerInput = document.getElementById('referrerAddress');
-            if (referrerInput) {
-                referrerInput.value = referrer;
-                referrerInput.style.border = '2px solid #00ff00';
-                referrerInput.style.boxShadow = '0 0 15px #00ff00';
-                
-                showToast('✨ Referrer address auto-filled!', 'success');
-                
-                // Enable activate button if wallet is connected
-                if (userAccount) {
-                    const activateBtn = document.getElementById('activateBtn');
-                    if (activateBtn) {
-                        activateBtn.disabled = false;
-                    }
-                }
-                
-                // Remove highlight after 3 seconds
-                setTimeout(() => {
-                    referrerInput.style.border = '';
-                    referrerInput.style.boxShadow = '';
-                }, 3000);
-            } else {
-                console.log('❌ Referrer input not found');
-            }
-        } else {
-            console.log('❌ Invalid address format:', referrer);
-        }
-    } else {
-        console.log('📭 No referrer in URL');
+    // Show success message
+    showToast('✨ Referrer address auto-filled!', 'success');
+    
+    // Enable activate button if wallet is connected
+    const activateBtn = document.getElementById('activateBtn');
+    if (activateBtn && userAccount) {
+        activateBtn.disabled = false;
     }
+    
+    // Remove highlight after 3 seconds
+    setTimeout(() => {
+        referrerInput.style.border = '';
+        referrerInput.style.boxShadow = '';
+    }, 3000);
+    
+    console.log('✅ Referrer address filled successfully');
+}
+
+// Also add this function to check Web3 initialization
+function waitForWeb3(callback, maxAttempts = 20) {
+    let attempts = 0;
+    const checkInterval = setInterval(() => {
+        attempts++;
+        if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
+            clearInterval(checkInterval);
+            callback(true);
+        } else if (attempts >= maxAttempts) {
+            clearInterval(checkInterval);
+            console.log('⏰ Web3 initialization timeout');
+            callback(false);
+        }
+    }, 500);
 }
 
 // ========== SHOW LEVEL DETAILS ==========
@@ -538,12 +624,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Claim Daily button - FIXED VERSION
     const claimBtn = document.getElementById('claimDailyBtn');
     if (claimBtn) {
-        // Remove old listener and add new one
-        claimBtn.removeEventListener('click', claimDailyReward);
-        claimBtn.addEventListener('click', claimDailyReward);
-        console.log('✅ Claim button listener added');
+        // Remove any existing listeners
+        const newClaimBtn = claimBtn.cloneNode(true);
+        claimBtn.parentNode.replaceChild(newClaimBtn, claimBtn);
+        
+        // Add new listener
+        newClaimBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Claim button clicked from new listener');
+            claimDailyReward();
+        });
+        console.log('✅ Claim button listener added (fixed version)');
     } else {
-        console.log('❌ Claim button not found');
+        console.log('❌ Claim button not found in DOM');
+        // Try to find it again after a short delay
+        setTimeout(() => {
+            const btn = document.getElementById('claimDailyBtn');
+            if (btn) {
+                btn.addEventListener('click', claimDailyReward);
+                console.log('✅ Claim button found and listener added (delayed)');
+            }
+        }, 1000);
     }
     
     // Withdraw Buttons
@@ -574,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('✅ Copy button listener added');
     }
     
-    // Check for referrer in URL (with delay to ensure DOM is ready)
+    // Check for referrer in URL
     setTimeout(() => {
         console.log('🔍 Checking URL for referrer...');
         if (typeof getReferrerFromUrl === 'function') {
