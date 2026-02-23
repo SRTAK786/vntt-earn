@@ -23,17 +23,34 @@ let userData = {
     referralEarnings: '0'
 };
 
-// Initialize Web3
+// ERC20 ABI (minimal for approve)
+const ERC20_ABI = [
+    {
+        "constant": false,
+        "inputs": [
+            {"name": "spender", "type": "address"},
+            {"name": "amount", "type": "uint256"}
+        ],
+        "name": "approve",
+        "outputs": [{"name": "", "type": "bool"}],
+        "type": "function"
+    }
+];
+
+// ========== INITIALIZATION ==========
 async function initWeb3() {
+    console.log('🚀 Initializing Web3...');
+    
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         try {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             const accounts = await web3.eth.getAccounts();
             userAccount = accounts[0];
-            console.log('Connected account:', userAccount);
+            console.log('✅ Connected account:', userAccount);
             
             contract = new web3.eth.Contract(CONTRACT_ABI, CONFIG.contractAddress);
+            console.log('✅ Contract initialized');
             
             updateWalletUI();
             await checkUserStatus();
@@ -43,8 +60,8 @@ async function initWeb3() {
             window.ethereum.on('chainChanged', () => window.location.reload());
             
         } catch (error) {
+            console.error('❌ Error:', error);
             showToast('Error connecting to wallet', 'error');
-            console.error(error);
             document.getElementById('activationCard').classList.remove('hidden');
             document.getElementById('userDashboard').classList.add('hidden');
         }
@@ -55,7 +72,7 @@ async function initWeb3() {
     }
 }
 
-// Update Wallet UI
+// ========== UI UPDATES ==========
 function updateWalletUI() {
     if (userAccount) {
         document.getElementById('connectWallet').classList.add('hidden');
@@ -68,10 +85,10 @@ function updateWalletUI() {
     }
 }
 
-// Check User Status
+// ========== CHECK USER STATUS ==========
 async function checkUserStatus() {
     if (!contract || !userAccount) {
-        console.log('No wallet/contract - showing activation card');
+        console.log('No wallet - showing activation card');
         document.getElementById('activationCard').classList.remove('hidden');
         document.getElementById('userDashboard').classList.add('hidden');
         return;
@@ -80,7 +97,7 @@ async function checkUserStatus() {
     try {
         console.log('Checking user status...');
         const user = await contract.methods.users(userAccount).call();
-        console.log('User activated status:', user.isActivated);
+        console.log('User data:', user);
         
         userData.isActivated = user.isActivated;
         
@@ -88,6 +105,7 @@ async function checkUserStatus() {
             console.log('User activated - showing dashboard');
             document.getElementById('activationCard').classList.add('hidden');
             document.getElementById('userDashboard').classList.remove('hidden');
+            document.getElementById('claimDailyBtn').style.display = 'block'; // Show claim button
             await updateUserData();
             await checkProjectEnded();
         } else {
@@ -96,27 +114,24 @@ async function checkUserStatus() {
             document.getElementById('userDashboard').classList.add('hidden');
         }
     } catch (error) {
-        console.error('Error checking user status:', error);
+        console.error('Error:', error);
         document.getElementById('activationCard').classList.remove('hidden');
         document.getElementById('userDashboard').classList.add('hidden');
     }
 }
 
-// Update User Data
+// ========== UPDATE USER DATA ==========
 async function updateUserData() {
     if (!contract || !userAccount) return;
     
     try {
-        // Get virtual balance
         const virtualBalance = await contract.methods.getUserVirtualBalance(userAccount).call();
         document.getElementById('virtualBalance').textContent = 
             `${web3.utils.fromWei(virtualBalance, 'ether')} VNTT`;
         
-        // Check if can claim today
         const canClaim = await contract.methods.canClaimToday(userAccount).call();
         document.getElementById('claimDailyBtn').disabled = !canClaim;
         
-        // Get referral counts for each level
         let totalReferrals = 0;
         for (let i = 0; i < 10; i++) {
             const count = await contract.methods.getReferralCount(userAccount, i).call();
@@ -126,12 +141,10 @@ async function updateUserData() {
         
         document.getElementById('totalReferrals').textContent = totalReferrals;
         
-        // Get total referral earnings
         const referralEarnings = await contract.methods.getTotalReferralEarnings(userAccount).call();
         document.getElementById('referralEarnings').textContent = 
             `${web3.utils.fromWei(referralEarnings, 'ether')} VNTT`;
         
-        // ✅ NEW LINE: Update referral link when user data updates
         updateReferralLink();
         
     } catch (error) {
@@ -139,7 +152,7 @@ async function updateUserData() {
     }
 }
 
-// Check if Project Ended
+// ========== CHECK PROJECT ENDED ==========
 async function checkProjectEnded() {
     if (!contract) return;
     
@@ -149,7 +162,6 @@ async function checkProjectEnded() {
     if (currentTime >= projectEndTime) {
         document.getElementById('withdrawalSection').classList.remove('hidden');
         
-        // Get withdrawal fees
         const feeUSDT = await contract.methods.withdrawalFeeUSDT().call();
         const feeVNT = await contract.methods.withdrawalFeeVNT().call();
         
@@ -160,61 +172,106 @@ async function checkProjectEnded() {
     }
 }
 
-// Activate User
+// ========== ACTIVATE USER ==========
 async function activateUser() {
-    if (!contract || !userAccount) {
-        showToast('Please connect wallet first', 'error');
+    console.log('🚀 Activate button clicked!');
+    
+    if (!contract) {
+        showToast('❌ Contract not initialized', 'error');
+        return;
+    }
+    
+    if (!userAccount) {
+        showToast('❌ Please connect wallet first', 'error');
         return;
     }
     
     const referrerAddress = document.getElementById('referrerAddress').value;
+    console.log('Referrer address:', referrerAddress);
+    
     if (!web3.utils.isAddress(referrerAddress)) {
-        showToast('Invalid referrer address', 'error');
+        showToast('❌ Invalid referrer address', 'error');
         return;
     }
     
+    const activateBtn = document.getElementById('activateBtn');
+    const originalText = activateBtn.innerHTML;
+    activateBtn.disabled = true;
+    activateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
     try {
-        // First approve USDT transfer
-        const usdtContract = new web3.eth.Contract(ERC20_ABI, CONFIG.usdtTokenAddress);
         const activationFee = await contract.methods.activationFee().call();
+        console.log('Activation fee:', activationFee.toString());
+        
+        const usdtContract = new web3.eth.Contract(ERC20_ABI, CONFIG.usdtTokenAddress);
         
         await usdtContract.methods.approve(CONFIG.contractAddress, activationFee)
-            .send({ from: userAccount });
+            .send({ from: userAccount })
+            .on('transactionHash', (hash) => {
+                console.log('Approve TX:', hash);
+                showToast('⏳ Approving USDT...', 'info');
+            });
         
-        // Activate user
+        showToast('✅ USDT Approved!', 'success');
+        
         await contract.methods.activate(referrerAddress)
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
-                showToast('Transaction submitted: ' + hash.slice(0, 10) + '...', 'info');
-            })
-            .on('receipt', () => {
-                showToast('Account activated successfully!', 'success');
-                checkUserStatus();
+                console.log('Activate TX:', hash);
+                showToast('⏳ Activating account...', 'info');
             });
         
+        console.log('✅ Activation successful!');
+        showToast('🎉 Account activated successfully!', 'success');
+        await checkUserStatus();
+        
     } catch (error) {
-        console.error('Activation error:', error);
-        showToast(error.message, 'error');
+        console.error('❌ Error:', error);
+        
+        if (error.message.includes('user rejected')) {
+            showToast('❌ Transaction rejected', 'error');
+        } else if (error.message.includes('AlreadyRegistered')) {
+            showToast('❌ Already registered!', 'error');
+        } else if (error.message.includes('ReferrerNotActivated')) {
+            showToast('❌ Referrer not activated!', 'error');
+        } else {
+            showToast('❌ Error: ' + error.message.slice(0, 50), 'error');
+        }
+    } finally {
+        activateBtn.disabled = false;
+        activateBtn.innerHTML = originalText;
     }
 }
 
-// Claim Daily Reward
+// ========== CLAIM DAILY REWARD ==========
 async function claimDailyReward() {
     if (!contract || !userAccount) return;
+    
+    const claimBtn = document.getElementById('claimDailyBtn');
+    const originalText = claimBtn.innerHTML;
+    claimBtn.disabled = true;
+    claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
     
     try {
         await contract.methods.claimDailyReward()
             .send({ from: userAccount })
-            .on('receipt', () => {
-                showToast('Daily reward claimed!', 'success');
-                updateUserData();
+            .on('transactionHash', (hash) => {
+                showToast('⏳ Claiming reward...', 'info');
             });
+        
+        showToast('✅ Daily reward claimed!', 'success');
+        await updateUserData();
+        
     } catch (error) {
-        console.error('Claim error:', error);
-        showToast(error.message, 'error');
+        console.error('Error:', error);
+        showToast('❌ Error claiming reward', 'error');
+    } finally {
+        claimBtn.disabled = false;
+        claimBtn.innerHTML = originalText;
     }
 }
 
+// ========== WITHDRAW ==========
 async function withdraw(feeType) {
     if (!contract || !userAccount) return;
     
@@ -224,53 +281,107 @@ async function withdraw(feeType) {
             const fee = await contract.methods.withdrawalFeeUSDT().call();
             await usdtContract.methods.approve(CONFIG.contractAddress, fee)
                 .send({ from: userAccount });
-            
-            // 1 for USDT
-            await contract.methods.withdraw(1)
-                .send({ from: userAccount })
-                .on('receipt', () => {
-                    showToast('Withdrawal successful!', 'success');
-                    updateUserData();
-                });
-                
+            await contract.methods.withdraw(1).send({ from: userAccount });
         } else if (feeType === 'VNT') {
             const vntContract = new web3.eth.Contract(ERC20_ABI, CONFIG.vntTokenAddress);
             const fee = await contract.methods.withdrawalFeeVNT().call();
             await vntContract.methods.approve(CONFIG.contractAddress, fee)
                 .send({ from: userAccount });
-            
-            // 2 for VNT
-            await contract.methods.withdraw(2)
-                .send({ from: userAccount })
-                .on('receipt', () => {
-                    showToast('Withdrawal successful!', 'success');
-                    updateUserData();
-                });
+            await contract.methods.withdraw(2).send({ from: userAccount });
         }
         
+        showToast('✅ Withdrawal successful!', 'success');
+        await updateUserData();
+        
     } catch (error) {
-        console.error('Withdrawal error:', error);
-        showToast(error.message, 'error');
+        console.error('Error:', error);
+        showToast('❌ Withdrawal failed', 'error');
     }
 }
 
+// ========== REFERRAL LINK FUNCTIONS ==========
+function updateReferralLink() {
+    if (!userAccount) {
+        const linkInput = document.getElementById('referralLink');
+        if (linkInput) {
+            linkInput.value = 'Connect wallet to see referral link';
+        }
+        return;
+    }
+    
+    const baseUrl = window.location.origin + window.location.pathname;
+    const cleanUrl = baseUrl.split('?')[0];
+    const referralLink = `${cleanUrl}?ref=${userAccount}`;
+    
+    const linkInput = document.getElementById('referralLink');
+    if (linkInput) {
+        linkInput.value = referralLink;
+    }
+}
+
+function copyReferralLink() {
+    const linkInput = document.getElementById('referralLink');
+    if (!linkInput || !linkInput.value || linkInput.value.includes('Connect wallet')) {
+        showToast('No referral link available', 'error');
+        return;
+    }
+    
+    linkInput.select();
+    navigator.clipboard.writeText(linkInput.value).then(() => {
+        showToast('✅ Referral link copied!', 'success');
+    }).catch(() => {
+        document.execCommand('copy');
+        showToast('✅ Referral link copied!', 'success');
+    });
+}
+
+// ========== GET REFERRER FROM URL ==========
+function getReferrerFromUrl() {
+    console.log('Checking URL for referrer...');
+    const urlParams = new URLSearchParams(window.location.search);
+    const referrer = urlParams.get('ref');
+    
+    console.log('Referrer from URL:', referrer);
+    
+    if (referrer && window.web3 && window.web3.utils && window.web3.utils.isAddress(referrer)) {
+        const referrerInput = document.getElementById('referrerAddress');
+        if (referrerInput) {
+            referrerInput.value = referrer;
+            referrerInput.style.border = '2px solid #00ff00';
+            showToast('✨ Referrer address auto-filled!', 'info');
+            
+            // Enable activate button
+            const activateBtn = document.getElementById('activateBtn');
+            if (activateBtn && userAccount) {
+                activateBtn.disabled = false;
+            }
+            
+            setTimeout(() => {
+                referrerInput.style.border = '';
+            }, 3000);
+        }
+    }
+}
+
+// ========== SHOW LEVEL DETAILS ==========
 async function showLevelDetails(level) {
-    if (!contract || !userAccount) return;
+    if (!contract || !userAccount) {
+        showToast('Please connect wallet first', 'info');
+        return;
+    }
     
     const modal = document.getElementById('levelModal');
     document.getElementById('modalLevelTitle').querySelector('span').textContent = level;
     
-    // Sirf count दिखाएं, addresses नहीं
     const count = await contract.methods.getReferralCount(userAccount, level - 1).call();
     
     const membersList = document.getElementById('levelMembersList');
-    membersList.innerHTML = `<p class="info-message">Total <strong>${count}</strong> members in Level ${level}</p>
-                             <p class="note-message">Address list coming soon!</p>`;
+    membersList.innerHTML = `<p class="info-message">📊 Total <strong>${count}</strong> members in Level ${level}</p>`;
     
     modal.style.display = 'flex';
 }
 
-// Update Project Timer
+// ========== UPDATE TIMER ==========
 async function updateTimer() {
     if (!contract) return;
     
@@ -290,7 +401,7 @@ async function updateTimer() {
     }
 }
 
-// Show Toast
+// ========== SHOW TOAST ==========
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
@@ -298,85 +409,14 @@ function showToast(message, type = 'info') {
     toastMessage.textContent = message;
     toast.classList.remove('hidden');
     
-    if (type === 'success') {
-        toast.style.borderColor = '#00ff00';
-    } else if (type === 'error') {
-        toast.style.borderColor = '#ff0000';
-    }
+    if (type === 'success') toast.style.borderColor = '#00ff00';
+    else if (type === 'error') toast.style.borderColor = '#ff0000';
+    else toast.style.borderColor = '#00ffff';
     
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 5000);
+    setTimeout(() => toast.classList.add('hidden'), 5000);
 }
 
-function updateReferralLink() {
-    if (!userAccount) {
-        const linkInput = document.getElementById('referralLink');
-        if (linkInput) {
-            linkInput.value = 'Connect wallet to see referral link';
-        }
-        return;
-    }
-    
-    const baseUrl = window.location.origin + window.location.pathname;
-    // Clean URL - remove existing query params
-    const cleanUrl = baseUrl.split('?')[0];
-    const referralLink = `${cleanUrl}?ref=${userAccount}`;
-    
-    const linkInput = document.getElementById('referralLink');
-    if (linkInput) {
-        linkInput.value = referralLink;
-    }
-}
-
-// Copy Referral Link
-function copyReferralLink() {
-    const linkInput = document.getElementById('referralLink');
-    if (!linkInput || !linkInput.value || linkInput.value.includes('Connect wallet')) {
-        showToast('No referral link available', 'error');
-        return;
-    }
-    
-    linkInput.select();
-    linkInput.setSelectionRange(0, 99999); // For mobile
-    
-    try {
-        // Modern way
-        navigator.clipboard.writeText(linkInput.value).then(() => {
-            showToast('✅ Referral link copied! Share with friends', 'success');
-        }).catch(() => {
-            // Fallback
-            document.execCommand('copy');
-            showToast('✅ Referral link copied! Share with friends', 'success');
-        });
-    } catch (err) {
-        // Fallback for older browsers
-        document.execCommand('copy');
-        showToast('✅ Referral link copied! Share with friends', 'success');
-    }
-}
-
-// Auto-fill referrer from URL
-function getReferrerFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const referrer = urlParams.get('ref');
-    
-    if (referrer && window.web3 && window.web3.utils && window.web3.utils.isAddress(referrer)) {
-        const referrerInput = document.getElementById('referrerAddress');
-        if (referrerInput) {
-            referrerInput.value = referrer;
-            referrerInput.style.border = '2px solid #00ff00';
-            showToast('✨ Referrer address auto-filled!', 'info');
-            
-            // Remove highlight after 3 seconds
-            setTimeout(() => {
-                referrerInput.style.border = '';
-            }, 3000);
-        }
-    }
-}
-
-// Handle Account Change
+// ========== HANDLE ACCOUNT CHANGE ==========
 function handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
         userAccount = null;
@@ -389,109 +429,84 @@ function handleAccountsChanged(accounts) {
     updateWalletUI();
 }
 
-// Start Data Refresh
+// ========== START DATA REFRESH ==========
 function startDataRefresh() {
-    // Update user data every 30 seconds
     setInterval(updateUserData, 30000);
-    // Update timer every second
     setInterval(updateTimer, 1000);
 }
 
-// Event Listeners
+// ========== EVENT LISTENERS ==========
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded - setting up event listeners...');
+    
     // Connect Wallet
     const connectBtn = document.getElementById('connectWallet');
-    if (connectBtn) {
-        connectBtn.addEventListener('click', initWeb3);
-    }
+    if (connectBtn) connectBtn.addEventListener('click', initWeb3);
     
-    // Activate button - with fix for disabled state
+    // Activate button
     const activateBtn = document.getElementById('activateBtn');
     const referrerInput = document.getElementById('referrerAddress');
     
     if (activateBtn && referrerInput) {
-        // Enable/disable based on input
-        referrerInput.addEventListener('input', function() {
-            if (this.value.length >= 42 && userAccount) { // 42 is length of address with 0x
-                activateBtn.disabled = false;
+        // Remove any existing listeners and add new ones
+        activateBtn.replaceWith(activateBtn.cloneNode(true));
+        referrerInput.replaceWith(referrerInput.cloneNode(true));
+        
+        // Get fresh references
+        const newActivateBtn = document.getElementById('activateBtn');
+        const newReferrerInput = document.getElementById('referrerAddress');
+        
+        // Input listener
+        newReferrerInput.addEventListener('input', function() {
+            if (web3 && web3.utils && web3.utils.isAddress(this.value) && userAccount) {
+                newActivateBtn.disabled = false;
                 console.log('✅ Activate button enabled');
             } else {
-                activateBtn.disabled = true;
+                newActivateBtn.disabled = true;
                 console.log('❌ Activate button disabled');
             }
         });
         
-        // Also check on click of activate button (bypass disabled if needed)
-        activateBtn.addEventListener('click', activateUser);
+        // Click listener
+        newActivateBtn.addEventListener('click', activateUser);
     }
     
     // Claim Daily
     const claimBtn = document.getElementById('claimDailyBtn');
-    if (claimBtn) {
-        claimBtn.addEventListener('click', claimDailyReward);
-    }
+    if (claimBtn) claimBtn.addEventListener('click', claimDailyReward);
     
     // Withdraw Buttons
     const withdrawUSDTBtn = document.getElementById('withdrawUSDTBtn');
-    if (withdrawUSDTBtn) {
-        withdrawUSDTBtn.addEventListener('click', () => withdraw('USDT'));
-    }
+    if (withdrawUSDTBtn) withdrawUSDTBtn.addEventListener('click', () => withdraw('USDT'));
     
     const withdrawVNTBtn = document.getElementById('withdrawVNTBtn');
-    if (withdrawVNTBtn) {
-        withdrawVNTBtn.addEventListener('click', () => withdraw('VNT'));
-    }
+    if (withdrawVNTBtn) withdrawVNTBtn.addEventListener('click', () => withdraw('VNT'));
     
     // Modal Close
     const closeModal = document.querySelector('.close-modal');
     if (closeModal) {
         closeModal.addEventListener('click', () => {
-            const modal = document.getElementById('levelModal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
+            document.getElementById('levelModal').style.display = 'none';
         });
     }
     
-    // Copy button event listener
+    // Copy button
     const copyBtn = document.getElementById('copyLinkBtn');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', copyReferralLink);
-    }
+    if (copyBtn) copyBtn.addEventListener('click', copyReferralLink);
     
-    // Check if MetaMask is installed
+    // Check for referrer in URL (with delay to ensure web3 is loaded)
+    setTimeout(() => {
+        getReferrerFromUrl();
+    }, 1000);
+    
+    // Auto-connect if previously connected
     if (typeof window.ethereum !== 'undefined') {
         window.ethereum.request({ method: 'eth_accounts' })
             .then(accounts => {
                 if (accounts.length > 0) {
                     initWeb3();
                 }
-                if (typeof getReferrerFromUrl === 'function') {
-                    getReferrerFromUrl();
-                }
             })
-            .catch(error => {
-                console.error('Error checking accounts:', error);
-                if (typeof getReferrerFromUrl === 'function') {
-                    getReferrerFromUrl();
-                }
-            });
-    } else {
-        if (typeof getReferrerFromUrl === 'function') {
-            getReferrerFromUrl();
-        }
+            .catch(console.error);
     }
 });
-// ERC20 ABI (minimal for approve)
-const ERC20_ABI = [
-    {
-        "constant": false,
-        "inputs": [
-            {"name": "spender", "type": "address"},
-            {"name": "amount", "type": "uint256"}
-        ],
-        "name": "approve",
-        "outputs": [{"name": "", "type": "bool"}],
-        "type": "function"
-    }
-];
