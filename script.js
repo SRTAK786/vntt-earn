@@ -34,6 +34,13 @@ const ERC20_ABI = [
         "name": "approve",
         "outputs": [{"name": "", "type": "bool"}],
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{"name": "owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "type": "function"
     }
 ];
 
@@ -42,8 +49,10 @@ async function initWeb3() {
     console.log('🚀 Initializing Web3...');
     
     if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
         try {
+            // Create Web3 instance with ethereum provider
+            web3 = new Web3(window.ethereum);
+            
             await window.ethereum.request({ method: 'eth_requestAccounts' });
             const accounts = await web3.eth.getAccounts();
             userAccount = accounts[0];
@@ -112,12 +121,13 @@ async function checkUserStatus() {
             document.getElementById('activationCard').classList.add('hidden');
             document.getElementById('userDashboard').classList.remove('hidden');
             
-            // ✅ FIX: Daily claim button ko visible करें
+            // Enable claim button
             const claimBtn = document.getElementById('claimDailyBtn');
             if (claimBtn) {
                 claimBtn.style.display = 'block';
-                claimBtn.disabled = false;
-                console.log('✅ Claim button enabled');
+                const canClaim = await contract.methods.canClaimToday(userAccount).call();
+                claimBtn.disabled = !canClaim;
+                console.log('✅ Claim button enabled, can claim:', canClaim);
             }
             
             await updateUserData();
@@ -219,6 +229,15 @@ async function activateUser() {
         
         const usdtContract = new web3.eth.Contract(ERC20_ABI, CONFIG.usdtTokenAddress);
         
+        // Check USDT balance
+        const balance = await usdtContract.methods.balanceOf(userAccount).call();
+        if (parseInt(balance) < parseInt(activationFee)) {
+            showToast('❌ Insufficient USDT balance', 'error');
+            activateBtn.disabled = false;
+            activateBtn.innerHTML = originalText;
+            return;
+        }
+        
         await usdtContract.methods.approve(CONFIG.contractAddress, activationFee)
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
@@ -261,9 +280,15 @@ async function activateUser() {
 async function claimDailyReward() {
     console.log('🚀 Claim button clicked!');
     
-    // Check if web3 is initialized
-    if (!window.web3 || !window.ethereum) {
+    // Check if MetaMask is installed
+    if (!window.ethereum) {
         showToast('❌ Please install MetaMask first!', 'error');
+        return;
+    }
+    
+    // Check if web3 is initialized
+    if (!web3) {
+        showToast('❌ Web3 not initialized. Please refresh and connect wallet.', 'error');
         return;
     }
     
@@ -307,15 +332,11 @@ async function claimDailyReward() {
             .send({ from: userAccount })
             .on('transactionHash', (hash) => {
                 console.log('Claim TX:', hash);
-                showToast('⏳ Claiming reward... Transaction: ' + hash.slice(0, 10) + '...', 'info');
+                showToast('⏳ Claiming reward...', 'info');
             })
             .on('receipt', (receipt) => {
                 console.log('✅ Claim successful:', receipt);
                 showToast('✅ Daily reward claimed successfully!', 'success');
-            })
-            .on('error', (error) => {
-                console.error('Transaction error:', error);
-                throw error;
             });
         
         // Wait a moment for blockchain to update
@@ -323,10 +344,6 @@ async function claimDailyReward() {
         
         // Update user data
         await updateUserData();
-        
-        // Check if can claim again
-        const canClaimNow = await contract.methods.canClaimToday(userAccount).call();
-        claimBtn.disabled = !canClaimNow;
         
     } catch (error) {
         console.error('❌ Claim error:', error);
@@ -343,7 +360,8 @@ async function claimDailyReward() {
         } else {
             showToast('❌ Error: ' + (error.message || 'Unknown error').slice(0, 50), 'error');
         }
-        
+    } finally {
+        claimBtn.innerHTML = originalText;
         // Check current claim status
         try {
             const canClaimNow = await contract.methods.canClaimToday(userAccount).call();
@@ -351,8 +369,6 @@ async function claimDailyReward() {
         } catch {
             claimBtn.disabled = false;
         }
-    } finally {
-        claimBtn.innerHTML = originalText;
     }
 }
 
@@ -437,9 +453,9 @@ function getReferrerFromUrl() {
         }
         
         // Check if web3 is available
-        if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
+        if (web3 && web3.utils) {
             // Validate address
-            if (window.web3.utils.isAddress(referrer)) {
+            if (web3.utils.isAddress(referrer)) {
                 console.log('✅ Valid address found:', referrer);
                 fillReferrerAddress(referrer);
             } else {
@@ -450,9 +466,9 @@ function getReferrerFromUrl() {
             console.log('⏳ Web3 not ready, waiting...');
             // Try again after Web3 is loaded
             const checkWeb3Interval = setInterval(() => {
-                if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
+                if (web3 && web3.utils) {
                     clearInterval(checkWeb3Interval);
-                    if (window.web3.utils.isAddress(referrer)) {
+                    if (web3.utils.isAddress(referrer)) {
                         console.log('✅ Web3 loaded, valid address found:', referrer);
                         fillReferrerAddress(referrer);
                     }
@@ -501,22 +517,6 @@ function fillReferrerAddress(referrer) {
     console.log('✅ Referrer address filled successfully');
 }
 
-// Also add this function to check Web3 initialization
-function waitForWeb3(callback, maxAttempts = 20) {
-    let attempts = 0;
-    const checkInterval = setInterval(() => {
-        attempts++;
-        if (typeof window.web3 !== 'undefined' && window.web3 && window.web3.utils) {
-            clearInterval(checkInterval);
-            callback(true);
-        } else if (attempts >= maxAttempts) {
-            clearInterval(checkInterval);
-            console.log('⏰ Web3 initialization timeout');
-            callback(false);
-        }
-    }, 500);
-}
-
 // ========== SHOW LEVEL DETAILS ==========
 async function showLevelDetails(level) {
     if (!contract || !userAccount) {
@@ -547,9 +547,10 @@ async function updateTimer() {
         const days = Math.floor(remaining / 86400);
         const hours = Math.floor((remaining % 86400) / 3600);
         const minutes = Math.floor((remaining % 3600) / 60);
+        const seconds = remaining % 60;
         
         document.getElementById('timeRemaining').textContent = 
-            `${days}d ${hours}h ${minutes}m`;
+            `${days}d ${hours}h ${minutes}m ${seconds}s`;
     } else {
         document.getElementById('timeRemaining').textContent = 'Project Ended';
     }
@@ -607,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (activateBtn && referrerInput) {
         // Input listener
         referrerInput.addEventListener('input', function() {
-            if (window.web3 && window.web3.utils && window.web3.utils.isAddress(this.value) && userAccount) {
+            if (web3 && web3.utils && web3.utils.isAddress(this.value) && userAccount) {
                 activateBtn.disabled = false;
                 console.log('✅ Activate button enabled');
             } else {
@@ -624,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Claim Daily button - FIXED VERSION
     const claimBtn = document.getElementById('claimDailyBtn');
     if (claimBtn) {
-        // Remove any existing listeners
+        // Remove any existing listeners by replacing the button
         const newClaimBtn = claimBtn.cloneNode(true);
         claimBtn.parentNode.replaceChild(newClaimBtn, claimBtn);
         
@@ -637,14 +638,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('✅ Claim button listener added (fixed version)');
     } else {
         console.log('❌ Claim button not found in DOM');
-        // Try to find it again after a short delay
-        setTimeout(() => {
-            const btn = document.getElementById('claimDailyBtn');
-            if (btn) {
-                btn.addEventListener('click', claimDailyReward);
-                console.log('✅ Claim button found and listener added (delayed)');
-            }
-        }, 1000);
     }
     
     // Withdraw Buttons
@@ -675,13 +668,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('✅ Copy button listener added');
     }
     
-    // Check for referrer in URL
+    // Check for referrer in URL immediately
     setTimeout(() => {
-        console.log('🔍 Checking URL for referrer...');
-        if (typeof getReferrerFromUrl === 'function') {
-            getReferrerFromUrl();
-        }
-    }, 1500);
+        console.log('🔍 Checking URL for referrer immediately...');
+        getReferrerFromUrl();
+    }, 500);
     
     // Auto-connect if previously connected
     if (typeof window.ethereum !== 'undefined') {
@@ -697,3 +688,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 });
+
+// Make functions available globally
+window.claimDailyReward = claimDailyReward;
+window.activateUser = activateUser;
+window.copyReferralLink = copyReferralLink;
+window.showLevelDetails = showLevelDetails;
