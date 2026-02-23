@@ -152,10 +152,6 @@ async function updateUserData() {
         const virtualBalance = await contract.methods.getUserVirtualBalance(userAccount).call();
         document.getElementById('virtualBalance').textContent = 
             `${web3.utils.fromWei(virtualBalance, 'ether')} VNTT`;
-        
-        // Inside updateUserData function, find this part:
-        const canClaim = await contract.methods.canClaimToday(userAccount).call();
-        document.getElementById('claimDailyBtn').disabled = !canClaim;
 
         // Replace with:
         const canClaim = await contract.methods.canClaimToday(userAccount).call();
@@ -760,6 +756,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+});
+
     // ========== DEBUG FUNCTION ==========
 async function debugClaimStatus() {
     console.log('🔧 DEBUG: Checking claim status manually');
@@ -819,7 +817,6 @@ document.addEventListener('keydown', (e) => {
         }
         setTimeout(() => { debugPressCount = 0; }, 500);
     }
-});
 });
 
 // Make functions available globally
